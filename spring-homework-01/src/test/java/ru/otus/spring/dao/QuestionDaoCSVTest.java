@@ -12,6 +12,6 @@ class QuestionDaoCSVTest {
     @Test
     public void whenSuccess() throws IOException, CsvException {
         QuestionDao dao = new QuestionDaoCSV("test-questions.csv");
-        assertEquals(5 , dao.findAllQuestions().size());
+        assertEquals(5, dao.findAllQuestions().size());
     }
 }
