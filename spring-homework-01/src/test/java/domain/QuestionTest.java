@@ -1,11 +1,11 @@
-package ru.otus.spring.domain;
+package domain;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("Class Question")
 class QuestionTest {

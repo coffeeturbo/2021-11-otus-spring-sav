@@ -1,11 +1,11 @@
-package ru.otus.spring.dao;
+package dao;
 
 import com.opencsv.exceptions.CsvException;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class QuestionDaoCSVTest {
 

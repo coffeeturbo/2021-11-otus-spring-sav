@@ -1,7 +1,7 @@
-package ru.otus.spring.service;
+package service;
 
+import dao.QuestionDao;
 import lombok.RequiredArgsConstructor;
-import ru.otus.spring.dao.QuestionDao;
 
 import java.util.ArrayList;
 import java.util.List;

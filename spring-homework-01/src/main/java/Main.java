@@ -1,7 +1,5 @@
-package ru.otus.spring;
-
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import ru.otus.spring.service.QuestionService;
+import service.QuestionService;
 
 public class Main {
 

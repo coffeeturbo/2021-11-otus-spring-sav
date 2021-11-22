@@ -1,4 +1,4 @@
-package ru.otus.spring.domain;
+package domain;
 
 import lombok.Value;
 
