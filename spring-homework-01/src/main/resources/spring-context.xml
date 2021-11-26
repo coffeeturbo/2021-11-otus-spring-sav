@@ -4,12 +4,21 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+    <bean id="ioService" class="service.IOServiceImpl">
+    </bean>
+
     <bean id="questionDao" class="dao.QuestionDaoCSV">
-        <constructor-arg value="questions.csv" />
+        <constructor-arg name="questionsFile" value="questions.csv" />
+        <constructor-arg name="ioService" ref="ioService" />
     </bean>
 
     <bean id="questionService" class="service.QuestionServiceImpl">
        <constructor-arg ref="questionDao" name="dao" />
+    </bean>
+
+    <bean id="quizService" class="service.QuizServiceImpl">
+        <constructor-arg ref="questionService" name="questionService" />
+        <constructor-arg ref="ioService" name="ioService" />
     </bean>
 
 </beans>

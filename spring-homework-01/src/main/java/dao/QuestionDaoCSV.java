@@ -1,38 +1,45 @@
 package dao;
 
-import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
 import domain.Question;
+import exception.QuestionsNotFoundException;
+import service.IOService;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class QuestionDaoCSV implements QuestionDao {
 
-    List<String[]> csvData;
+    private final String questionsFile;
+    private final IOService ioService;
 
-    public QuestionDaoCSV(String questionsFile) throws IOException, CsvException {
-        var in = getClass().getResourceAsStream("/" + questionsFile);
-        if (in == null) {
-            throw new FileNotFoundException("file wasn't founded");
-        }
-        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-        CSVReader csvReader = new CSVReader(reader);
-        csvData = csvReader.readAll();
+    public QuestionDaoCSV(String questionsFile, IOService ioService) {
+        this.questionsFile = questionsFile;
+        this.ioService = ioService;
     }
 
-
     @Override
-    public List<Question> findAllQuestions() {
-        List<Question> questions = new ArrayList<>();
-        for (var quest : csvData) {
-            questions.add(new Question(quest[0], List.of(Arrays.copyOfRange(quest, 1, quest.length))));
+    public List<Question> findAllQuestions() throws QuestionsNotFoundException {
+
+        List<String[]> csvData = null;
+        try {
+            csvData = ioService.readData(questionsFile);
+        } catch (IOException | CsvException e) {
+            e.printStackTrace();
         }
+
+        if (csvData.isEmpty()) {
+            throw new QuestionsNotFoundException("В файле не найдено вопросов");
+        }
+
+        List<Question> questions = new ArrayList<>(csvData.size());
+
+        for (var quest : csvData) {
+            questions.add(new Question(Arrays.asList(quest)));
+        }
+
         return questions;
     }
 }

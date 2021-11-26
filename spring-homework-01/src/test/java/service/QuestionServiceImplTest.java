@@ -2,6 +2,7 @@ package service;
 
 import dao.QuestionDao;
 import domain.Question;
+import exception.QuestionsNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -19,9 +20,9 @@ class QuestionServiceImplTest {
     private QuestionDao dao;
 
     @Test
-    void whenGetQuestionsSuccess() {
+    void whenGetQuestionsSuccess() throws QuestionsNotFoundException {
         given(dao.findAllQuestions())
-                .willReturn(List.of(new Question("question 1?", List.of())));
+                .willReturn(List.of(new Question(List.of("question 1?"))));
 
         var service = new QuestionServiceImpl(dao);
         assertEquals(1, service.getQuestions().size());
