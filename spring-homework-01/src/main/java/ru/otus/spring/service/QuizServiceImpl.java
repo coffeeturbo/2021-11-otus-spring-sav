@@ -1,19 +1,18 @@
-package service;
+package ru.otus.spring.service;
 
-import exception.QuestionsNotFoundException;
 import lombok.RequiredArgsConstructor;
+import ru.otus.spring.exception.QuestionsBadFormatException;
 
 @RequiredArgsConstructor
 public class QuizServiceImpl implements QuizService {
     private final QuestionService questionService;
-    private final IOServiceImpl ioService;
+    private final IOService ioService;
 
 
-    @Override
-    public void printAllQuestions() {
+    protected void printAllQuestions() {
         try {
             questionService.getQuestions().forEach(ioService::println);
-        } catch (QuestionsNotFoundException e) {
+        } catch (QuestionsBadFormatException e) {
             e.printStackTrace();
         }
     }

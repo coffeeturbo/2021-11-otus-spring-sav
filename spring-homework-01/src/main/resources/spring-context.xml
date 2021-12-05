@@ -4,21 +4,24 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="ioService" class="service.IOServiceImpl">
+    <bean id="ioService" class="ru.otus.spring.service.IOServiceImpl">
+    </bean>
+    <bean id="csvLoader" class="ru.otus.spring.service.CsvResourceLoaderIml">
     </bean>
 
-    <bean id="questionDao" class="dao.QuestionDaoCSV">
-        <constructor-arg name="questionsFile" value="questions.csv" />
-        <constructor-arg name="ioService" ref="ioService" />
+    <bean id="questionDao" class="ru.otus.spring.dao.QuestionDaoImpl">
+        <constructor-arg name="questionsFile" value="questions.csv"/>
     </bean>
 
-    <bean id="questionService" class="service.QuestionServiceImpl">
-       <constructor-arg ref="questionDao" name="dao" />
+    <bean id="questionService" class="ru.otus.spring.service.QuestionServiceImpl">
+        <constructor-arg ref="questionDao" name="dao"/>
+        <constructor-arg ref="ioService" name="ioService"/>
+        <constructor-arg ref="csvLoader" name="loader"/>
     </bean>
 
-    <bean id="quizService" class="service.QuizServiceImpl">
-        <constructor-arg ref="questionService" name="questionService" />
-        <constructor-arg ref="ioService" name="ioService" />
+    <bean id="quizService" class="ru.otus.spring.service.QuizServiceImpl">
+        <constructor-arg ref="questionService" name="questionService"/>
+        <constructor-arg ref="ioService" name="ioService"/>
     </bean>
 
 </beans>
