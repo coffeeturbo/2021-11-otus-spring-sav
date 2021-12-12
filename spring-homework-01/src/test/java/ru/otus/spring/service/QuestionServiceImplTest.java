@@ -9,6 +9,7 @@ import ru.otus.spring.dao.QuestionDao;
 import ru.otus.spring.domain.AnswerVariant;
 import ru.otus.spring.domain.Question;
 import ru.otus.spring.exception.QuestionsBadFormatException;
+import ru.otus.spring.service.io.Output;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,7 +26,7 @@ class QuestionServiceImplTest {
     private QuestionDao dao;
 
     @Mock
-    private IOService ioService;
+    private Output output;
 
     @Mock
     private CsvResourceLoader loader;
@@ -41,7 +42,7 @@ class QuestionServiceImplTest {
         given(loader.readData(anyString()))
                 .willReturn(list);
 
-        var questionService = new QuestionServiceImpl(dao, ioService, loader);
+        var questionService = new QuestionServiceImpl(dao, loader);
 
         var question = new Question("Question ?", List.of(new AnswerVariant("1", false)));
         Assertions.assertThat(questionService.getQuestions())
@@ -60,7 +61,7 @@ class QuestionServiceImplTest {
         given(loader.readData("anyString"))
                 .willReturn(Collections.emptyList());
 
-        var questionService = new QuestionServiceImpl(dao, ioService, loader);
+        var questionService = new QuestionServiceImpl(dao, loader);
 
         Exception exception = assertThrows(QuestionsBadFormatException.class, questionService::getQuestions);
 

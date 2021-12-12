@@ -4,11 +4,11 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class QuestionDaoImplTest {
+class QuestionDaoCsvTest {
 
     @Test
     public void whenGetCsvDaoFilenameSuccess() {
-        QuestionDao dao = new QuestionDaoImpl("test-questions.csv");
+        QuestionDao dao = new QuestionDaoCsv("test-questions.csv");
 
         assertThat(dao.getCsvDaoFilename())
                 .isNotNull()
