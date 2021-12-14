@@ -1,13 +1,11 @@
 package ru.otus.spring.domain.formatter;
 
-import lombok.Value;
+import org.springframework.stereotype.Component;
 import ru.otus.spring.domain.User;
 
-@Value
+@Component
 public class UserFormatter {
-    User user;
-
-    public String format() {
+    public String format(final User user) {
         return user.getName() + " " + user.getSurname();
     }
 }

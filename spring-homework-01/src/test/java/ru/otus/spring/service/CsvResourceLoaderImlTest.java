@@ -15,9 +15,26 @@ class CsvResourceLoaderImlTest {
     }
 
     @Test
-    void readData() {
+    void whenReadDataSuccess() {
         var data = csvResourceLoader.readData("test-questions.csv");
         Assertions.assertThat(data)
                 .hasSize(5);
     }
+
+    @Test
+    void whenFileEmpty() {
+        var data = csvResourceLoader.readData("test-empty-questions.csv");
+        Assertions.assertThat(data)
+                .hasSize(0);
+
+
+    }
+
+    @Test
+    void whenFileNotFound() {
+        var data = csvResourceLoader.readData("not-exists-test-questions.csv");
+        Assertions.assertThat(data)
+                .isNull();
+    }
+
 }

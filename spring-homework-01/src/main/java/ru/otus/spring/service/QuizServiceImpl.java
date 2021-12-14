@@ -1,32 +1,40 @@
 package ru.otus.spring.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import ru.otus.spring.domain.Question;
 import ru.otus.spring.domain.Quiz;
 import ru.otus.spring.domain.User;
 import ru.otus.spring.domain.formatter.QuestionFormatter;
 import ru.otus.spring.domain.formatter.UserFormatter;
-import ru.otus.spring.exception.QuestionsBadFormatException;
-import ru.otus.spring.service.io.Input;
-import ru.otus.spring.service.io.Output;
+import ru.otus.spring.exception.InputVariantMismatchException;
+import ru.otus.spring.exception.QuestionException;
+import ru.otus.spring.service.io.IOService;
 
+@Slf4j
 @Service
 public class QuizServiceImpl implements QuizService {
     private final QuestionService questionService;
-    private final Output output;
-    private final Input input;
+    private final IOService ioService;
     private final int successPercent;
+    private final UserFormatter userFormatter;
+    private final QuestionFormatter questionFormatter;
     private final Quiz quiz = new Quiz();
 
 
     public QuizServiceImpl(QuestionService questionService,
-                           Output output,
-                           Input input,
-                           @Value("${app.success-percent}") int successPercent) {
+                           IOService ioService,
+                           @Value("${app.success-percent}") int successPercent,
+                           UserFormatter userFormatter,
+                           QuestionFormatter questionFormatter
+
+    ) {
         this.questionService = questionService;
-        this.output = output;
-        this.input = input;
+        this.ioService = ioService;
         this.successPercent = successPercent;
+        this.userFormatter = userFormatter;
+        this.questionFormatter = questionFormatter;
     }
 
     @Override
@@ -36,64 +44,54 @@ public class QuizServiceImpl implements QuizService {
         printQuizResults();
     }
 
-    private String askUserName() {
-        return input.askStr("Input your Name: ");
-    }
-
-    private String askUserSurnName() {
-        return input.askStr("Input your Surname: ");
-    }
-
     private void askUserQuestions() {
         try {
             for (var question : questionService.getQuestions()) {
-                var formatter = new QuestionFormatter(question);
-
-                var run = true;
-                while (run) {
-                    try {
-                        var answer = input.askInt(formatter.fullQuestion(), question.getVariants().size());
-                        if (answer == question.getRightAnswerVariantIndex()) {
-                            quiz.incrementRightAnsweredCount();
-                            output.println("right");
-                        } else {
-                            quiz.incrementBadAnsweredCount();
-                            output.println("bad answer");
-                        }
-
-                        run = false;
-                    } catch (IllegalStateException e) {
-                        run = true;
-                        output.println("введенный варинт ответа отсутствует");
-                        output.println("Попробуйте еще раз");
-                    }
-
-                }
+                askQuestion(question);
             }
-        } catch (QuestionsBadFormatException e) {
-            e.printStackTrace();
+        } catch (QuestionException e) {
+            log.error(e.getMessage());
+        }
+    }
+
+    private void askQuestion(Question question) {
+        var stringQuestion = questionFormatter.fullQuestion(question);
+        while (true) {
+            try {
+                var answer = ioService.askInt(stringQuestion, question.getVariants().size());
+                if (answer == question.getRightAnswerVariantIndex()) {
+                    quiz.incrementRightAnsweredCount();
+                    ioService.println("right");
+                } else {
+                    quiz.incrementBadAnsweredCount();
+                    ioService.println("bad answer");
+                }
+                break;
+            } catch (InputVariantMismatchException e) {
+                log.warn(e.getMessage());
+                log.warn("Try again please");
+            }
         }
     }
 
     private void printQuizResults() {
 
-        var userFormatter = new UserFormatter(quiz.getUser());
-        output.println(userFormatter.format());
-        output.println("right answered: " + quiz.getRightAnsweredCount());
-        output.println("Bad answered: " + quiz.getBadAnsweredCount());
+        ioService.println(userFormatter.format(quiz.getUser()));
+        ioService.println("Right answered: " + quiz.getRightAnsweredCount());
+        ioService.println("Bad answered: " + quiz.getBadAnsweredCount());
 
         var x = 100 * quiz.getRightAnsweredCount() / (quiz.getRightAnsweredCount() + quiz.getBadAnsweredCount());
 
         if (x >= successPercent) {
-            output.println("Exam passed");
+            ioService.println("Exam passed");
         } else {
-            output.println("Exam failed");
+            ioService.println("Exam failed");
         }
     }
 
     private void askUserInfo() {
-        var name = askUserName();
-        var surname = askUserSurnName();
+        var name = ioService.askStr("Input your Name: ");
+        var surname = ioService.askStr("Input your Surname: ");
         quiz.setUser(new User(name, surname));
     }
 }

@@ -4,10 +4,10 @@ import lombok.Data;
 
 @Data
 public class Quiz {
-    int rightAnsweredCount;
-    int badAnsweredCount;
+    private int rightAnsweredCount;
+    private int badAnsweredCount;
 
-    User user;
+    private User user;
 
     public void incrementRightAnsweredCount() {
         rightAnsweredCount++;
@@ -16,5 +16,4 @@ public class Quiz {
     public void incrementBadAnsweredCount() {
         badAnsweredCount++;
     }
-
 }

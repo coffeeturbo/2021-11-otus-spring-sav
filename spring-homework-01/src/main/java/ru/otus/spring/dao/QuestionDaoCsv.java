@@ -1,24 +1,41 @@
 package ru.otus.spring.dao;
 
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.experimental.FieldDefaults;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import ru.otus.spring.domain.Question;
+import ru.otus.spring.domain.formatter.QuestionFormatter;
+import ru.otus.spring.service.CsvResourceLoader;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Component
 @Getter
-@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class QuestionDaoCsv implements QuestionDao {
 
-    String questionsFile;
+    private final String questionsFile;
+    private final CsvResourceLoader loader;
+    private final QuestionFormatter formatter;
 
-    public QuestionDaoCsv(@org.springframework.beans.factory.annotation.Value("${app.questions-file}") String questionsFile) {
+    public QuestionDaoCsv(
+            @Value("${app.questions-file}") String questionsFile,
+            CsvResourceLoader loader,
+            QuestionFormatter formatter
+    ) {
         this.questionsFile = questionsFile;
+        this.loader = loader;
+        this.formatter = formatter;
     }
 
     @Override
-    public String getCsvDaoFilename() {
-        return questionsFile;
+    public List<Question> getQuestions() {
+
+        List<String[]> data = loader.readData(questionsFile);
+
+        return data.stream()
+                .map(formatter::parseFromStringArray)
+                .collect(Collectors.toList());
     }
 }
