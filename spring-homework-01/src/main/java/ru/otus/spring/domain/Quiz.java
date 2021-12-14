@@ -1,8 +1,10 @@
 package ru.otus.spring.domain;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Setter
+@Getter
 public class Quiz {
     private int rightAnsweredCount;
     private int badAnsweredCount;
