@@ -47,5 +47,4 @@ class QuizTest {
         quiz.setUser(new User("test2", "test2"));
         assertThat(quiz.getUser()).isNotEqualTo(new User("test", "test"));
     }
-
 }

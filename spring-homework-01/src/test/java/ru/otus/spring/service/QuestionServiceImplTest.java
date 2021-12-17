@@ -25,9 +25,6 @@ class QuestionServiceImplTest {
 
     @Test
     void whenGetQuestionsSuccess() throws QuestionException {
-//        List<String[]> list = new ArrayList<>(List.of());
-//        list.add(new String[] {"Question ?", "1"});
-
         given(dao.getQuestions())
                 .willReturn(List.of(
                         new Question("Question ?", List.of(new AnswerVariant("1", false)))
@@ -54,6 +51,6 @@ class QuestionServiceImplTest {
         Exception exception = assertThrows(QuestionException.class, questionService::getQuestions);
 
         Assertions.assertThat(exception.getMessage())
-                .isEqualTo("bad file format error");
+                .isEqualTo("no data recieved");
     }
 }

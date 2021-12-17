@@ -1,9 +1,11 @@
 package ru.otus.spring.domain;
 
-import lombok.Value;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
-@Value
+@RequiredArgsConstructor
+@Data
 public class User {
-    String name;
-    String surname;
+    private final String name;
+    private final String surname;
 }

@@ -19,7 +19,7 @@ public class QuestionServiceImpl implements QuestionService {
         var data = dao.getQuestions();
 
         if (data == null || data.isEmpty()) {
-            throw new QuestionException("bad file format error");
+            throw new QuestionException("no data recieved");
         }
 
         return data;

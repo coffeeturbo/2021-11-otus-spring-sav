@@ -11,7 +11,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
 @ExtendWith(MockitoExtension.class)
-class ConsoleIOServiceTest {
+class IOServiceImplTest {
     private IOService output;
     private PrintStream backup;
     private ByteArrayOutputStream bos;
@@ -19,18 +19,15 @@ class ConsoleIOServiceTest {
 
     @BeforeEach
     void setUp() {
-
         backup = System.out;
         bos = new ByteArrayOutputStream();
-        output = new ConsoleIOService(System.in, new PrintStream(bos));
-        System.setOut(new PrintStream(bos));
+        output = new IOServiceImpl(System.in, new PrintStream(bos));
     }
 
     @AfterEach
     void tearDown() {
         System.setOut(backup);
     }
-
 
     @Test
     void whenPrintln() {
@@ -39,6 +36,4 @@ class ConsoleIOServiceTest {
         Assertions.assertThat(bos.toString())
                 .isEqualTo("test message" + System.lineSeparator());
     }
-
-
 }

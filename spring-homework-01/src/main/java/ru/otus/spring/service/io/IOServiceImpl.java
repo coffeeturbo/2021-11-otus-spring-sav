@@ -9,12 +9,12 @@ import java.io.PrintStream;
 import java.util.Scanner;
 
 @Service
-public class ConsoleIOService implements IOService {
+public class IOServiceImpl implements IOService {
 
     private final Scanner scanner;
     private final PrintStream printStream;
 
-    public ConsoleIOService(
+    public IOServiceImpl(
             @Value("#{ T(java.lang.System).in }") InputStream input,
             @Value("#{ T(java.lang.System).out }") PrintStream out
     ) {
@@ -39,14 +39,14 @@ public class ConsoleIOService implements IOService {
     }
 
     @Override
-    public String askStr(String question) {
-        printStream.print(question);
+    public String askStr(String str) {
+        printStream.print(str);
         return scanner.nextLine();
     }
 
     @Override
-    public int askInt(String question) throws NumberFormatException {
-        return Integer.parseInt(askStr(question));
+    public int askInt(String str) throws NumberFormatException {
+        return Integer.parseInt(askStr(str));
     }
 
     @Override

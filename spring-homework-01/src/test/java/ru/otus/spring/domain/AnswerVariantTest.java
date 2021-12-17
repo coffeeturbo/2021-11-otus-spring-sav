@@ -7,20 +7,19 @@ import static org.junit.jupiter.api.Assertions.*;
 class AnswerVariantTest {
 
     @Test
-    void getTextVariant() {
+    void whenGetTextVariantSuccess() {
         var variant = new AnswerVariant("Neo", true);
         assertEquals("Neo", variant.getTextVariant());
-
     }
 
     @Test
-    void isRightTrue() {
+    void whenIsRightTrue() {
         var variant = new AnswerVariant("Neo", true);
         assertTrue(variant.isRight());
     }
 
     @Test
-    void isRightFalse() {
+    void whenIsRightFalse() {
         var variant = new AnswerVariant("Neo", false);
         assertFalse(variant.isRight());
     }

@@ -1,4 +1,4 @@
-package ru.otus.spring.domain.formatter;
+package ru.otus.spring.formatter;
 
 import org.springframework.stereotype.Component;
 import ru.otus.spring.domain.AnswerVariant;

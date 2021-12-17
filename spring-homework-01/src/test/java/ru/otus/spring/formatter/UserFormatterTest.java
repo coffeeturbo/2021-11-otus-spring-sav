@@ -1,4 +1,4 @@
-package ru.otus.spring.domain.formatter;
+package ru.otus.spring.formatter;
 
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;

@@ -6,10 +6,10 @@ import org.springframework.stereotype.Service;
 import ru.otus.spring.domain.Question;
 import ru.otus.spring.domain.Quiz;
 import ru.otus.spring.domain.User;
-import ru.otus.spring.domain.formatter.QuestionFormatter;
-import ru.otus.spring.domain.formatter.UserFormatter;
 import ru.otus.spring.exception.InputVariantMismatchException;
 import ru.otus.spring.exception.QuestionException;
+import ru.otus.spring.formatter.QuestionFormatter;
+import ru.otus.spring.formatter.UserFormatter;
 import ru.otus.spring.service.io.IOService;
 
 @Slf4j
@@ -20,7 +20,7 @@ public class QuizServiceImpl implements QuizService {
     private final int successPercent;
     private final UserFormatter userFormatter;
     private final QuestionFormatter questionFormatter;
-    private final Quiz quiz = new Quiz();
+
 
 
     public QuizServiceImpl(QuestionService questionService,
@@ -39,31 +39,36 @@ public class QuizServiceImpl implements QuizService {
 
     @Override
     public void startQuiz() {
-        askUserInfo();
-        askUserQuestions();
-        printQuizResults();
+        Quiz quiz = new Quiz();
+        quiz.setUser(askUserInfo());
+        askUserQuestions(quiz);
+        printQuizResults(quiz);
     }
 
-    private void askUserQuestions() {
+    private void askUserQuestions(Quiz quiz) {
         try {
             for (var question : questionService.getQuestions()) {
-                askQuestion(question);
+                if (askQuestion(question)) {
+                    quiz.incrementRightAnsweredCount();
+                } else {
+                    quiz.incrementBadAnsweredCount();
+                }
             }
         } catch (QuestionException e) {
             log.error(e.getMessage());
         }
     }
 
-    private void askQuestion(Question question) {
+    private boolean askQuestion(Question question) {
         var stringQuestion = questionFormatter.fullQuestion(question);
+        boolean rightAnswer = false;
         while (true) {
             try {
                 var answer = ioService.askInt(stringQuestion, question.getVariants().size());
                 if (answer == question.getRightAnswerVariantIndex()) {
-                    quiz.incrementRightAnsweredCount();
+                    rightAnswer = true;
                     ioService.println("right");
                 } else {
-                    quiz.incrementBadAnsweredCount();
                     ioService.println("bad answer");
                 }
                 break;
@@ -72,9 +77,10 @@ public class QuizServiceImpl implements QuizService {
                 log.warn("Try again please");
             }
         }
+        return rightAnswer;
     }
 
-    private void printQuizResults() {
+    private void printQuizResults(Quiz quiz) {
 
         ioService.println(userFormatter.format(quiz.getUser()));
         ioService.println("Right answered: " + quiz.getRightAnsweredCount());
@@ -89,9 +95,9 @@ public class QuizServiceImpl implements QuizService {
         }
     }
 
-    private void askUserInfo() {
+    private User askUserInfo() {
         var name = ioService.askStr("Input your Name: ");
         var surname = ioService.askStr("Input your Surname: ");
-        quiz.setUser(new User(name, surname));
+        return new User(name, surname);
     }
 }
