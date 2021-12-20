@@ -3,7 +3,7 @@ package ru.otus.spring.service;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,7 +11,7 @@ import java.io.InputStreamReader;
 import java.util.List;
 
 @Slf4j
-@Service
+@Component
 public class CsvResourceLoaderIml implements CsvResourceLoader {
 
     @Override

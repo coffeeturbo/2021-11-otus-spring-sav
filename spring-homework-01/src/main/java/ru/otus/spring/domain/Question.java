@@ -1,13 +1,15 @@
 package ru.otus.spring.domain;
 
-import lombok.Value;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
-@Value
+@RequiredArgsConstructor
+@Data
 public class Question {
-    String question;
-    List<AnswerVariant> variants;
+    private final String question;
+    private final List<AnswerVariant> variants;
 
     public int getRightAnswerVariantIndex() {
         var it = variants.iterator();
