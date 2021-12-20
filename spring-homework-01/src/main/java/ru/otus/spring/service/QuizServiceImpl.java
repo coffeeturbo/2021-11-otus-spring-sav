@@ -39,24 +39,22 @@ public class QuizServiceImpl implements QuizService {
 
     @Override
     public void startQuiz() {
-        Quiz quiz = new Quiz();
-        quiz.setUser(askUserInfo());
-        askUserQuestions(quiz);
-        printQuizResults(quiz);
+        User user = askUserInfo();
+        Quiz quizResult = askUserQuestions(user);
+        printQuizResults(quizResult);
     }
 
-    private void askUserQuestions(Quiz quiz) {
+    private Quiz askUserQuestions(User user) {
+        var quiz = new Quiz(user);
         try {
             for (var question : questionService.getQuestions()) {
-                if (askQuestion(question)) {
-                    quiz.incrementRightAnsweredCount();
-                } else {
-                    quiz.incrementBadAnsweredCount();
-                }
+                var res = askQuestion(question);
+                quiz.incrementRightAnsweredCountIfNecessary(res);
             }
         } catch (QuestionException e) {
             log.error(e.getMessage());
         }
+        return quiz;
     }
 
     private boolean askQuestion(Question question) {
@@ -81,7 +79,6 @@ public class QuizServiceImpl implements QuizService {
     }
 
     private void printQuizResults(Quiz quiz) {
-
         ioService.println(userFormatter.format(quiz.getUser()));
         ioService.println("Right answered: " + quiz.getRightAnsweredCount());
         ioService.println("Bad answered: " + quiz.getBadAnsweredCount());

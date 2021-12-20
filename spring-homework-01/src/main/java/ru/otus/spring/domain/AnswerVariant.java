@@ -1,9 +1,11 @@
 package ru.otus.spring.domain;
 
-import lombok.Value;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
-@Value
+@RequiredArgsConstructor
+@Data
 public class AnswerVariant {
-    String textVariant;
-    boolean isRight;
+    private final String textVariant;
+    private final boolean isRight;
 }

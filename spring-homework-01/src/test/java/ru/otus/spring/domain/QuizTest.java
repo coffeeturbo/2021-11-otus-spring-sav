@@ -12,7 +12,7 @@ class QuizTest {
 
     @BeforeEach
     void init() {
-        quiz = new Quiz();
+        quiz = new Quiz(new User("test", "test"));
     }
 
     @Test
