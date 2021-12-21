@@ -37,7 +37,7 @@ class QuestionDaoCsvTest {
         given(csvResourceLoader.readData(anyString()))
                 .willReturn(questions);
 
-        var config = new AppConfig("test-questions.csv", 40, "ru-RU");
+        var config = new AppConfig("test-questions", ".csv", 40, "ru-RU");
         var dao = new QuestionDaoCsv(config, csvResourceLoader, questionFormatter);
 
         assertThat(dao.getQuestions())
@@ -51,7 +51,7 @@ class QuestionDaoCsvTest {
         given(csvResourceLoader.readData(anyString()))
                 .willReturn(new ArrayList<>());
 
-        var config = new AppConfig("test-empty-questions.csv", 40, "ru-RU");
+        var config = new AppConfig("test-empty-questions", ".csv", 40, "ru-RU");
         var dao = new QuestionDaoCsv(config, csvResourceLoader, questionFormatter);
 
         assertThat(dao.getQuestions())

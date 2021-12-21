@@ -29,7 +29,7 @@ public class QuestionDaoCsv implements QuestionDao {
             CsvResourceLoader loader,
             QuestionFormatter formatter
     ) {
-        this.questionsFile = config.getQuestionsFile();
+        this.questionsFile = config.getQuestionsFileName();
         this.loader = loader;
         this.formatter = formatter;
     }

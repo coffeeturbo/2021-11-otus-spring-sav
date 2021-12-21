@@ -40,7 +40,7 @@ public class QuizServiceImpl implements QuizService {
         this.userFormatter = userFormatter;
         this.questionFormatter = questionFormatter;
         this.message = messageSource;
-        this.locale = Locale.forLanguageTag(config.getLocale());
+        this.locale = config.getLocale();
     }
 
     @Override
