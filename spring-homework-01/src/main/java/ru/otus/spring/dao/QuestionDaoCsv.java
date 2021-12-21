@@ -3,8 +3,8 @@ package ru.otus.spring.dao;
 import com.opencsv.exceptions.CsvException;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import ru.otus.spring.config.AppConfig;
 import ru.otus.spring.domain.Question;
 import ru.otus.spring.formatter.QuestionFormatter;
 import ru.otus.spring.service.CsvResourceLoader;
@@ -25,11 +25,11 @@ public class QuestionDaoCsv implements QuestionDao {
     private final QuestionFormatter formatter;
 
     public QuestionDaoCsv(
-            @Value("${app.questions-file}") String questionsFile,
+            AppConfig config,
             CsvResourceLoader loader,
             QuestionFormatter formatter
     ) {
-        this.questionsFile = questionsFile;
+        this.questionsFile = config.getQuestionsFile();
         this.loader = loader;
         this.formatter = formatter;
     }
