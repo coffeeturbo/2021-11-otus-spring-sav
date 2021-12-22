@@ -1,7 +1,6 @@
 package ru.otus.spring.dao;
 
 import com.opencsv.exceptions.CsvException;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -17,7 +16,6 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Component
-@Getter
 public class QuestionDaoCsv implements QuestionDao {
 
     private final String questionsFile;
