@@ -1,46 +1,28 @@
 package ru.otus.spring.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import ru.otus.spring.dao.QuestionDao;
-import ru.otus.spring.domain.AnswerVariant;
 import ru.otus.spring.domain.Question;
-import ru.otus.spring.exception.QuestionsBadFormatException;
+import ru.otus.spring.exception.QuestionException;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
+@Service
 @RequiredArgsConstructor
 public class QuestionServiceImpl implements QuestionService {
 
     private final QuestionDao dao;
-    private final IOService ioService;
-    private final CsvResourceLoader loader;
 
     @Override
-    public List<Question> getQuestions() throws QuestionsBadFormatException {
-        List<String[]> data = loader.readData(dao.getCsvDaoFilename());
+    public List<Question> getQuestions() throws QuestionException {
+        var data = dao.getQuestions();
 
         if (data == null || data.isEmpty()) {
-            throw new QuestionsBadFormatException("Неправильынй формат фала");
+            throw new QuestionException("no data recieved");
         }
 
-        return data.stream()
-                .map(QuestionServiceImpl::parseFromStringArray)
-                .collect(Collectors.toList());
+        return data;
     }
 
-    private static Question parseFromStringArray(String[] quest) {
-        var variants = Arrays.stream(quest)
-                .filter(s -> !s.contains("?"))
-                .map(s -> new AnswerVariant(s, s.contains("*")))
-                .collect(Collectors.toList());
-
-        var question = Arrays.stream(quest)
-                .filter(s -> s.contains("?"))
-                .findFirst()
-                .orElse(null);
-
-        return new Question(question, variants);
-    }
 }

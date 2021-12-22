@@ -30,4 +30,24 @@ class QuestionTest {
                 .extracting("textVariant", "isRight")
                 .containsAnyOf(Tuple.tuple("chosen one", true));
     }
+
+    @Test
+    void whenGetRightAnswerVariantIndex() {
+        var question = new Question("Who was neo?", List.of(
+                new AnswerVariant("chosen one", true),
+                new AnswerVariant("chosen two", false),
+                new AnswerVariant("chosen three", false)
+        ));
+
+        Assertions.assertThat(question.getRightAnswerVariantIndex())
+                .isEqualTo(1);
+    }
+
+    @Test
+    void whenGetRightAnswerVariantIndexOnEmptyVariants() {
+        var question = new Question("Who was neo?", List.of());
+
+        Assertions.assertThat(question.getRightAnswerVariantIndex())
+                .isEqualTo(0);
+    }
 }

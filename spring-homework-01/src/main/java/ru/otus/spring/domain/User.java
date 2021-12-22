@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Data
-public class AnswerVariant {
-    private final String textVariant;
-    private final boolean isRight;
+public class User {
+    private final String name;
+    private final String surname;
 }
