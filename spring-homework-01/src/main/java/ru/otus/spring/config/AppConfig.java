@@ -15,17 +15,19 @@ import java.util.Locale;
 @AllArgsConstructor
 @Getter
 @Setter
-public class AppConfig {
+public class AppConfig implements QuestionsFilename, AppLocale {
     private String questionsFileName;
     private String questionsFileExtension;
     private int successPercent;
     private String locale;
 
+    @Override
     public String getQuestionsFileName() {
         var formattedLocale = locale.replace("-", "_");
         return questionsFileName + "_" + formattedLocale + questionsFileExtension;
     }
 
+    @Override
     public Locale getLocale() {
         return Locale.forLanguageTag(locale);
     }

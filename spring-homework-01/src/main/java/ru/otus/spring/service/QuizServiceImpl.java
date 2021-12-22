@@ -1,7 +1,6 @@
 package ru.otus.spring.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import ru.otus.spring.config.AppConfig;
 import ru.otus.spring.domain.Question;
@@ -13,8 +12,6 @@ import ru.otus.spring.formatter.QuestionFormatter;
 import ru.otus.spring.formatter.UserFormatter;
 import ru.otus.spring.service.io.IOService;
 
-import java.util.Locale;
-
 @Slf4j
 @Service
 public class QuizServiceImpl implements QuizService {
@@ -23,8 +20,7 @@ public class QuizServiceImpl implements QuizService {
     private final int successPercent;
     private final UserFormatter userFormatter;
     private final QuestionFormatter questionFormatter;
-    private final MessageSource message;
-    private final Locale locale;
+    private final LocalizationService messageService;
 
 
     public QuizServiceImpl(QuestionService questionService,
@@ -32,15 +28,14 @@ public class QuizServiceImpl implements QuizService {
                            AppConfig config,
                            UserFormatter userFormatter,
                            QuestionFormatter questionFormatter,
-                           MessageSource messageSource
+                           LocalizationService messageService
     ) {
         this.questionService = questionService;
         this.ioService = ioService;
         this.successPercent = config.getSuccessPercent();
         this.userFormatter = userFormatter;
         this.questionFormatter = questionFormatter;
-        this.message = messageSource;
-        this.locale = config.getLocale();
+        this.messageService = messageService;
     }
 
     @Override
@@ -64,10 +59,6 @@ public class QuizServiceImpl implements QuizService {
     }
 
     private boolean askQuestion(Question question) {
-        var rightAnswerMess = getMessage("strings.app.answer.right");
-        var badAnswerMess = getMessage("strings.app.answer.bad");
-        var tryAgainMess = getMessage("strings.app.answer.try");
-
         var stringQuestion = questionFormatter.fullQuestion(question);
         boolean rightAnswer = false;
         while (true) {
@@ -75,22 +66,22 @@ public class QuizServiceImpl implements QuizService {
                 var answer = ioService.askInt(stringQuestion, question.getVariants().size());
                 if (answer == question.getRightAnswerVariantIndex()) {
                     rightAnswer = true;
-                    ioService.println(rightAnswerMess);
+                    ioService.println(messageService.getMessage("strings.app.answer.right"));
                 } else {
-                    ioService.println(badAnswerMess);
+                    ioService.println(messageService.getMessage("strings.app.answer.bad"));
                 }
                 break;
             } catch (InputVariantMismatchException e) {
                 log.warn(e.getMessage());
-                log.warn(tryAgainMess);
+                log.warn(messageService.getMessage("strings.app.answer.try"));
             }
         }
         return rightAnswer;
     }
 
     private void printQuizResults(Quiz quiz) {
-        var answeredMes = getMessage("strings.app.result.answered");
-        var answeredBadMes = getMessage("strings.app.result.answered.bad");
+        var answeredMes = messageService.getMessage("strings.app.result.answered");
+        var answeredBadMes = messageService.getMessage("strings.app.result.answered.bad");
 
         ioService.println(userFormatter.format(quiz.getUser()));
         ioService.println(answeredMes + ": " + quiz.getRightAnsweredCount());
@@ -99,22 +90,18 @@ public class QuizServiceImpl implements QuizService {
         var x = 100 * quiz.getRightAnsweredCount() / (quiz.getRightAnsweredCount() + quiz.getBadAnsweredCount());
 
         if (x >= successPercent) {
-            ioService.println(getMessage("strings.app.result.quiz.passed"));
+            ioService.println(messageService.getMessage("strings.app.result.quiz.passed"));
         } else {
-            ioService.println(getMessage("strings.app.result.quiz.failed"));
+            ioService.println(messageService.getMessage("strings.app.result.quiz.failed"));
         }
     }
 
     private User askUserInfo() {
-        var askName = getMessage("strings.app.input.name");
-        var askSurname = getMessage("strings.app.input.surname");
+        var askName = messageService.getMessage("strings.app.input.name");
+        var askSurname = messageService.getMessage("strings.app.input.surname");
 
         var name = ioService.askStr(askName + ": ");
         var surname = ioService.askStr(askSurname + ": ");
         return new User(name, surname);
-    }
-
-    private String getMessage(String code) {
-        return message.getMessage(code, null, locale);
     }
 }

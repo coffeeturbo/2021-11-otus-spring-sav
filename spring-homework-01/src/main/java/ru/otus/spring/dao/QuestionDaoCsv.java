@@ -3,7 +3,7 @@ package ru.otus.spring.dao;
 import com.opencsv.exceptions.CsvException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import ru.otus.spring.config.AppConfig;
+import ru.otus.spring.config.QuestionsFilename;
 import ru.otus.spring.domain.Question;
 import ru.otus.spring.formatter.QuestionFormatter;
 import ru.otus.spring.service.CsvResourceLoader;
@@ -18,16 +18,16 @@ import java.util.stream.Collectors;
 @Component
 public class QuestionDaoCsv implements QuestionDao {
 
-    private final String questionsFile;
+    private final QuestionsFilename questionsFilename;
     private final CsvResourceLoader loader;
     private final QuestionFormatter formatter;
 
     public QuestionDaoCsv(
-            AppConfig config,
+            QuestionsFilename questionsFilename,
             CsvResourceLoader loader,
             QuestionFormatter formatter
     ) {
-        this.questionsFile = config.getQuestionsFileName();
+        this.questionsFilename = questionsFilename;
         this.loader = loader;
         this.formatter = formatter;
     }
@@ -37,7 +37,7 @@ public class QuestionDaoCsv implements QuestionDao {
 
         List<String[]> data;
         try {
-            data = loader.readData(questionsFile);
+            data = loader.readData(questionsFilename.getQuestionsFileName());
         } catch (IOException | CsvException e) {
             log.error(e.getMessage());
             return Collections.emptyList();

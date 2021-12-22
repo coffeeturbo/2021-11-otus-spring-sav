@@ -1,7 +1,7 @@
 spring.messages.basename: i18n/messages
 
 app:
-  locale: ru-RU
+  locale: en-EN
   questions-file-name: questions/questions
   questions-file-extension: .csv
   success-percent: 60
