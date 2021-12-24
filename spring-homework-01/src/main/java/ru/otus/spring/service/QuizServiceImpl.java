@@ -2,7 +2,7 @@ package ru.otus.spring.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.otus.spring.config.AppConfig;
+import ru.otus.spring.config.AppConfigHolder;
 import ru.otus.spring.domain.Question;
 import ru.otus.spring.domain.Quiz;
 import ru.otus.spring.domain.User;
@@ -25,7 +25,7 @@ public class QuizServiceImpl implements QuizService {
 
     public QuizServiceImpl(QuestionService questionService,
                            IOService ioService,
-                           AppConfig config,
+                           AppConfigHolder config,
                            UserFormatter userFormatter,
                            QuestionFormatter questionFormatter,
                            LocalizationService messageService
@@ -72,8 +72,8 @@ public class QuizServiceImpl implements QuizService {
                 }
                 break;
             } catch (InputVariantMismatchException e) {
-                log.warn(e.getMessage());
-                log.warn(messageService.getMessage("strings.app.answer.try"));
+                log.warn(String.valueOf(e));
+                ioService.println(messageService.getMessage("strings.app.answer.try"));
             }
         }
         return rightAnswer;

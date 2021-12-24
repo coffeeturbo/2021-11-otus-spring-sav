@@ -1,5 +1,5 @@
 package ru.otus.spring.config;
 
-public interface QuestionsFilename {
+public interface QuestionsFilenameHolder {
     String getQuestionsFileName();
 }

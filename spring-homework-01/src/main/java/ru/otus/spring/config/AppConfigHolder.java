@@ -15,7 +15,7 @@ import java.util.Locale;
 @AllArgsConstructor
 @Getter
 @Setter
-public class AppConfig implements QuestionsFilename, AppLocale {
+public class AppConfigHolder implements QuestionsFilenameHolder, AppLocaleHolder {
     private String questionsFileName;
     private String questionsFileExtension;
     private int successPercent;

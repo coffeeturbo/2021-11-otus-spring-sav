@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.otus.spring.config.AppConfig;
+import ru.otus.spring.config.AppConfigHolder;
 import ru.otus.spring.formatter.QuestionFormatter;
 import ru.otus.spring.service.CsvResourceLoader;
 
@@ -37,7 +37,7 @@ class QuestionDaoCsvTest {
         given(csvResourceLoader.readData(anyString()))
                 .willReturn(questions);
 
-        var config = new AppConfig("test-questions", ".csv", 40, "ru-RU");
+        var config = new AppConfigHolder("test-questions", ".csv", 40, "ru-RU");
         var dao = new QuestionDaoCsv(config, csvResourceLoader, questionFormatter);
 
         assertThat(dao.getQuestions())
@@ -51,7 +51,7 @@ class QuestionDaoCsvTest {
         given(csvResourceLoader.readData(anyString()))
                 .willReturn(new ArrayList<>());
 
-        var config = new AppConfig("test-empty-questions", ".csv", 40, "ru-RU");
+        var config = new AppConfigHolder("test-empty-questions", ".csv", 40, "ru-RU");
         var dao = new QuestionDaoCsv(config, csvResourceLoader, questionFormatter);
 
         assertThat(dao.getQuestions())
