@@ -1,2 +1,7 @@
-app.questions-file: questions.csv
-app.success-percent: 60
+spring.messages.basename: i18n/messages
+
+app:
+  locale: en-EN
+  questions-file-name: questions/questions
+  questions-file-extension: .csv
+  success-percent: 60

@@ -29,10 +29,11 @@ public class IOServiceImpl implements IOService {
             select = askInt(question);
             if (select < 1 || select > max) {
                 throw new InputVariantMismatchException(
-                        String.format("the inputted answer variant: %s doesn't exist", select));
+                        String.format("The inputted answer variant: %s doesn't exist", select)
+                );
             }
         } catch (NumberFormatException e) {
-            throw new InputVariantMismatchException("the inputted answer is not numeric");
+            throw new InputVariantMismatchException("The inputted variant is not numeric");
         }
 
         return select;

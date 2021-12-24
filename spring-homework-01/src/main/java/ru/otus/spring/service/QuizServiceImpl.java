@@ -1,8 +1,8 @@
 package ru.otus.spring.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import ru.otus.spring.config.AppConfigHolder;
 import ru.otus.spring.domain.Question;
 import ru.otus.spring.domain.Quiz;
 import ru.otus.spring.domain.User;
@@ -20,21 +20,22 @@ public class QuizServiceImpl implements QuizService {
     private final int successPercent;
     private final UserFormatter userFormatter;
     private final QuestionFormatter questionFormatter;
-
+    private final LocalizationService messageService;
 
 
     public QuizServiceImpl(QuestionService questionService,
                            IOService ioService,
-                           @Value("${app.success-percent}") int successPercent,
+                           AppConfigHolder config,
                            UserFormatter userFormatter,
-                           QuestionFormatter questionFormatter
-
+                           QuestionFormatter questionFormatter,
+                           LocalizationService messageService
     ) {
         this.questionService = questionService;
         this.ioService = ioService;
-        this.successPercent = successPercent;
+        this.successPercent = config.getSuccessPercent();
         this.userFormatter = userFormatter;
         this.questionFormatter = questionFormatter;
+        this.messageService = messageService;
     }
 
     @Override
@@ -65,36 +66,42 @@ public class QuizServiceImpl implements QuizService {
                 var answer = ioService.askInt(stringQuestion, question.getVariants().size());
                 if (answer == question.getRightAnswerVariantIndex()) {
                     rightAnswer = true;
-                    ioService.println("right");
+                    ioService.println(messageService.getMessage("strings.app.answer.right"));
                 } else {
-                    ioService.println("bad answer");
+                    ioService.println(messageService.getMessage("strings.app.answer.bad"));
                 }
                 break;
             } catch (InputVariantMismatchException e) {
-                log.warn(e.getMessage());
-                log.warn("Try again please");
+                log.warn(String.valueOf(e));
+                ioService.println(messageService.getMessage("strings.app.answer.try"));
             }
         }
         return rightAnswer;
     }
 
     private void printQuizResults(Quiz quiz) {
+        var answeredMes = messageService.getMessage("strings.app.result.answered");
+        var answeredBadMes = messageService.getMessage("strings.app.result.answered.bad");
+
         ioService.println(userFormatter.format(quiz.getUser()));
-        ioService.println("Right answered: " + quiz.getRightAnsweredCount());
-        ioService.println("Bad answered: " + quiz.getBadAnsweredCount());
+        ioService.println(answeredMes + ": " + quiz.getRightAnsweredCount());
+        ioService.println(answeredBadMes + ": " + quiz.getBadAnsweredCount());
 
         var x = 100 * quiz.getRightAnsweredCount() / (quiz.getRightAnsweredCount() + quiz.getBadAnsweredCount());
 
         if (x >= successPercent) {
-            ioService.println("Exam passed");
+            ioService.println(messageService.getMessage("strings.app.result.quiz.passed"));
         } else {
-            ioService.println("Exam failed");
+            ioService.println(messageService.getMessage("strings.app.result.quiz.failed"));
         }
     }
 
     private User askUserInfo() {
-        var name = ioService.askStr("Input your Name: ");
-        var surname = ioService.askStr("Input your Surname: ");
+        var askName = messageService.getMessage("strings.app.input.name");
+        var askSurname = messageService.getMessage("strings.app.input.surname");
+
+        var name = ioService.askStr(askName + ": ");
+        var surname = ioService.askStr(askSurname + ": ");
         return new User(name, surname);
     }
 }
