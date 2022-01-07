@@ -1,4 +1,7 @@
-spring.messages.basename: i18n/messages
+spring:
+  messages.basename: i18n/messages
+  main:
+    allow-circular-references: true
 
 app:
   locale: en-EN

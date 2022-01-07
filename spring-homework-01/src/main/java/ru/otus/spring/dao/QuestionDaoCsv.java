@@ -24,11 +24,11 @@ public class QuestionDaoCsv implements QuestionDao {
 
     public QuestionDaoCsv(
             QuestionsFilenameHolder questionsFilenameHolder,
-            CsvResourceLoader loader,
+            CsvResourceLoader csvResourceLoader,
             QuestionFormatter formatter
     ) {
         this.questionsFilenameHolder = questionsFilenameHolder;
-        this.loader = loader;
+        this.loader = csvResourceLoader;
         this.formatter = formatter;
     }
 
