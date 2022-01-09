@@ -53,7 +53,7 @@ public class QuizServiceImpl implements QuizService {
                 quiz.incrementRightAnsweredCountIfNecessary(res);
             }
         } catch (QuestionException e) {
-            log.error(e.getMessage());
+            log.error("An exception occurred", e);
         }
         return quiz;
     }
@@ -72,7 +72,7 @@ public class QuizServiceImpl implements QuizService {
                 }
                 break;
             } catch (InputVariantMismatchException e) {
-                log.warn(String.valueOf(e));
+                log.warn("An exception occurred", e);
                 ioService.println(messageService.getMessage("strings.app.answer.try"));
             }
         }
