@@ -2,22 +2,20 @@ package ru.otus.spring.service;
 
 import com.opencsv.exceptions.CsvException;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
+@SpringBootTest(classes = CsvResourceLoaderIml.class)
 class CsvResourceLoaderImlTest {
 
-    private static CsvResourceLoader csvResourceLoader;
-
-    @BeforeAll()
-    static void init() {
-        csvResourceLoader = new CsvResourceLoaderIml();
-    }
+    @Autowired
+    private CsvResourceLoader csvResourceLoader;
 
     @Test
     void whenReadDataSuccess() throws IOException, CsvException {
@@ -34,7 +32,7 @@ class CsvResourceLoaderImlTest {
     }
 
     @Test
-    void whenFileNotFound() throws IOException, CsvException {
+    void whenFileNotFound() throws CsvException {
 
         Exception exception = assertThrows(IOException.class, () -> csvResourceLoader.readData("not-exists-test-questions.csv"));
 
