@@ -15,6 +15,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>spring-homework-01</module>
+        <module>spring-homework-05</module>
     </modules>
 
     <properties>

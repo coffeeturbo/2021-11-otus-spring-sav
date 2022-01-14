@@ -1,0 +1,34 @@
+DROP TABLE IF EXISTS author;
+CREATE TABLE author (
+    id SERIAL PRIMARY KEY,
+    first_name VARCHAR(255),
+    last_name VARCHAR(255)
+);
+
+DROP TABLE IF EXISTS genre;
+CREATE TABLE genre (
+   id SERIAL PRIMARY KEY,
+   name VARCHAR(255)
+);
+
+DROP TABLE IF EXISTS book;
+CREATE TABLE book (
+   id SERIAL PRIMARY KEY,
+   author_id BIGINT REFERENCES author(id) ON DELETE CASCADE,
+   name VARCHAR(255)
+);
+
+DROP TABLE IF EXISTS book_genre;
+CREATE TABLE book_genre (
+   book_id BIGINT REFERENCES book(id) ON DELETE CASCADE,
+   genre_id BIGINT REFERENCES genre(id) ON DELETE CASCADE
+);
+
+DROP TABLE IF EXISTS author_book;
+CREATE TABLE author_book (
+   author_id BIGINT REFERENCES author(id) ON DELETE CASCADE,
+   book_id BIGINT REFERENCES book(id) ON DELETE CASCADE
+);
+
+
+
