@@ -1,6 +1,7 @@
 package ru.otus.spring.jdbc.dao;
 
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
@@ -14,6 +15,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
+@DisplayName(" Дао Автора ")
 @JdbcTest
 @ComponentScan(value = "ru.otus.spring.jdbc.dao")
 class AuthorDaoJdbcTest {
@@ -21,12 +23,14 @@ class AuthorDaoJdbcTest {
     @Autowired
     private AuthorDao dao;
 
+    @DisplayName(" Получить количество записей ")
     @Test
     void count() {
         var expectedCount = 1;
         assertThat(dao.count()).isEqualTo(expectedCount);
     }
 
+    @DisplayName(" Добавить автора ")
     @Test
     void insert() {
         var newAuthor = new Author(0, "Jack", "Sparrow", Collections.emptyList());
@@ -39,6 +43,7 @@ class AuthorDaoJdbcTest {
                 .isEqualTo(expectedAuthor);
     }
 
+    @DisplayName(" Изменить автора ")
     @Test
     void update() {
         var updatedAuthor = new Author(1, "Jack", "Sparrow", Collections.emptyList());
@@ -47,6 +52,7 @@ class AuthorDaoJdbcTest {
         assertThat(dao.getById(1)).isEqualTo(updatedAuthor);
     }
 
+    @DisplayName(" Удалить автора по id ")
     @Test
     void deleteByIdSuccess() {
         dao.deleteById(1);
@@ -54,6 +60,7 @@ class AuthorDaoJdbcTest {
                 .isExactlyInstanceOf(EmptyResultDataAccessException.class);
     }
 
+    @DisplayName(" Получить по id автора")
     @Test
     void getById() {
         var expectAuthor = new Author(1, "Jack", "London", Collections.emptyList());
@@ -61,6 +68,7 @@ class AuthorDaoJdbcTest {
         Assertions.assertThat(author).isEqualTo(expectAuthor);
     }
 
+    @DisplayName(" Получить всех авторов ")
     @Test
     void getAll() {
         var expectAuthor = new Author(1, "Jack", "London", Collections.emptyList());

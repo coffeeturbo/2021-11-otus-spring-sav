@@ -1,5 +1,6 @@
 package ru.otus.spring.jdbc.dao;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
@@ -12,6 +13,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
+@DisplayName(" ДАО Жанра")
 @JdbcTest
 @ComponentScan(value = "ru.otus.spring.jdbc.dao")
 class GenreDaoJdbcTest {
@@ -19,11 +21,13 @@ class GenreDaoJdbcTest {
     @Autowired
     private GenreDao dao;
 
+    @DisplayName(" Получить количество жанров ")
     @Test
     void count() {
         assertThat(dao.count()).isEqualTo(2);
     }
 
+    @DisplayName(" Создать жанр ")
     @Test
     void insert() {
         var newGenre = new Genre(0, "test genre");
@@ -31,14 +35,14 @@ class GenreDaoJdbcTest {
         assertThat(id).isNotZero();
     }
 
+    @DisplayName(" Обновить жанр ")
     @Test
     void update() {
         var updateGenre = new Genre(0, "test genre");
         dao.update(updateGenre);
-
-
     }
 
+    @DisplayName(" Удалить жанр по id ")
     @Test
     void deleteById() {
         dao.deleteById(2);
@@ -47,12 +51,14 @@ class GenreDaoJdbcTest {
                 .isExactlyInstanceOf(EmptyResultDataAccessException.class);
     }
 
+    @DisplayName(" Получить жанр по id")
     @Test
     void getById() {
         var expectedGenre = new Genre(1, "comedy");
         assertThat(dao.getById(1)).isEqualTo(expectedGenre);
     }
 
+    @DisplayName(" Получить все жанры ")
     @Test
     void getAll() {
         var expectedGenres = List.of(
@@ -64,6 +70,7 @@ class GenreDaoJdbcTest {
                 .containsExactlyElementsOf(expectedGenres);
     }
 
+    @DisplayName(" Получить жанры по id ")
     @Test
     void getGenresByBookId() {
         var expectedGenres = List.of(

@@ -1,5 +1,6 @@
 package ru.otus.spring.jdbc.formatter;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.otus.spring.jdbc.domain.Author;
 import ru.otus.spring.jdbc.domain.Book;
@@ -12,6 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class BookFormatterTest {
 
+    @DisplayName(" Приводит книгу к строке ")
     @Test
     void format() {
         var formatter = new BookFormatter();

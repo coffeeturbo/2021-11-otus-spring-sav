@@ -1,6 +1,7 @@
 package ru.otus.spring.jdbc.dao;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
@@ -16,6 +17,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
+@DisplayName(" ДАО Книги ")
 @JdbcTest
 @ComponentScan(value = "ru.otus.spring.jdbc.dao")
 class BookDaoJdbcTest {
@@ -35,12 +37,14 @@ class BookDaoJdbcTest {
         assertThat(dao.count()).isEqualTo(2);
     }
 
+    @DisplayName(" Создать книгу ")
     @Test
     void insert() {
         var newBook = new Book(0, author, "test book", Collections.emptyList());
         assertThat(dao.insert(newBook)).isNotZero().isGreaterThan(0);
     }
 
+    @DisplayName(" Изменить книгу ")
     @Test
     void update() {
         List<Genre> genres = List.of(
@@ -55,6 +59,7 @@ class BookDaoJdbcTest {
                 .isEqualTo(updateBook);
     }
 
+    @DisplayName(" Удалить книгу по id ")
     @Test
     void deleteById() {
         dao.deleteById(1);
@@ -62,6 +67,7 @@ class BookDaoJdbcTest {
                 .isExactlyInstanceOf(EmptyResultDataAccessException.class);
     }
 
+    @DisplayName(" Получить книгу по id ")
     @Test
     void getById() {
         List<Genre> genres = List.of(
@@ -76,6 +82,7 @@ class BookDaoJdbcTest {
                 .isEqualTo(expectedBook);
     }
 
+    @DisplayName(" Получить все книги ")
     @Test
     void getAll() {
 
@@ -96,6 +103,7 @@ class BookDaoJdbcTest {
                 .containsExactlyElementsOf(expectedBooks);
     }
 
+    @DisplayName(" Получить книги по id жанра ")
     @Test
     void getBooksByGenreId() {
         List<Genre> genres = List.of(
@@ -113,6 +121,7 @@ class BookDaoJdbcTest {
                 .containsExactlyElementsOf(expectedBooks);
     }
 
+    @DisplayName(" Получить книги по id автора ")
     @Test
     void getBooksByAuthorId() {
         List<Genre> genres = List.of(
