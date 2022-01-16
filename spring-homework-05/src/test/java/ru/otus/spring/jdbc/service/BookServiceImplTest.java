@@ -27,6 +27,14 @@ class BookServiceImplTest {
         assertThat(result).contains("AuthorName: JackLondon, NAME: testBook, GENRES: comedy, drama");
     }
 
+    @DisplayName(" Создать новую книгу c жанрами ")
+    @Rollback
+    @Test
+    void createBookWithGenres() {
+        var result = bookService.createBook(1, "testBook", "1,2");
+        assertThat(result).contains("AuthorName: JackLondon, NAME: testBook, GENRES: comedy, drama");
+    }
+
     @DisplayName(" Получить все книги ")
     @Test
     void getAllBooks() {

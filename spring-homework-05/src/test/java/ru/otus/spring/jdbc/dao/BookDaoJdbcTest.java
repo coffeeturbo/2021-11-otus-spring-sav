@@ -29,7 +29,7 @@ class BookDaoJdbcTest {
 
     @BeforeEach
     void init() {
-        author = new Author(1, "Jack", "London", Collections.emptyList());
+        author = new Author(1, "Jack", "London");
     }
 
     @Test
@@ -48,8 +48,7 @@ class BookDaoJdbcTest {
     @Test
     void update() {
         List<Genre> genres = List.of(
-                new Genre(1, "comedy"),
-                new Genre(2, "drama")
+                new Genre(1, "comedy")
         );
 
         var updateBook = new Book(1, author, "test book", genres);

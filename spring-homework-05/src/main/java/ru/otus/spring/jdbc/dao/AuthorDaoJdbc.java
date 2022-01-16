@@ -18,14 +18,12 @@ import java.util.Optional;
 @Repository
 public class AuthorDaoJdbc implements AuthorDao {
 
-    private static final String AUTHOR_TABLE = "author";
-
     private final NamedParameterJdbcOperations jdbc;
     private final AuthorMapper authorMapper;
 
     @Override
     public int count() {
-        Integer count = jdbc.queryForObject("SELECT COUNT(*) FROM " + AUTHOR_TABLE,
+        Integer count = jdbc.queryForObject("SELECT COUNT(*) FROM author",
                 Collections.emptyMap(), Integer.class);
         return count == null ? 0 : count;
     }
@@ -38,10 +36,12 @@ public class AuthorDaoJdbc implements AuthorDao {
 
         KeyHolder generatedKey = new GeneratedKeyHolder();
         jdbc.update(
-                "INSERT INTO " + AUTHOR_TABLE + " (first_name, last_name) VALUES(:first_name, :last_name)",
+                "INSERT INTO author(first_name, last_name) VALUES(:first_name, :last_name)",
                 params, generatedKey);
 
-        return Optional.of(generatedKey.getKey().longValue()).orElse(0L);
+        return Optional.ofNullable(generatedKey.getKey())
+                .orElse(0L)
+                .longValue();
     }
 
     @Override
@@ -52,9 +52,7 @@ public class AuthorDaoJdbc implements AuthorDao {
         params.addValue("last_name", author.getLastName());
 
         jdbc.update(
-                "UPDATE "
-                        + AUTHOR_TABLE
-                        + " SET first_name = :first_name, last_name = :last_name WHERE id=:id",
+                "UPDATE  author SET first_name = :first_name, last_name = :last_name WHERE id=:id",
                 params);
     }
 
@@ -64,7 +62,7 @@ public class AuthorDaoJdbc implements AuthorDao {
         params.addValue("id", id);
 
         jdbc.update(
-                "DELETE " + AUTHOR_TABLE + " WHERE id = :id",
+                "DELETE author WHERE id = :id",
                 params);
     }
 
@@ -73,8 +71,8 @@ public class AuthorDaoJdbc implements AuthorDao {
         HashMap<String, Object> params = new HashMap<>();
         params.put("id", id);
         return jdbc.queryForObject(
-                "SELECT id, first_name, last_name FROM "
-                        + AUTHOR_TABLE + " WHERE id=:id",
+                "SELECT id, first_name, last_name FROM author"
+                        + " WHERE id=:id",
                 params,
                 authorMapper);
     }
@@ -82,7 +80,7 @@ public class AuthorDaoJdbc implements AuthorDao {
     @Override
     public List<Author> getAll() {
         return jdbc.query(
-                "SELECT id, first_name, last_name FROM " + AUTHOR_TABLE,
+                "SELECT id, first_name, last_name FROM author",
                 authorMapper);
     }
 }

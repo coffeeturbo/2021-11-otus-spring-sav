@@ -18,13 +18,12 @@ import java.util.Optional;
 @Repository
 @RequiredArgsConstructor
 public class GenreDaoJdbc implements GenreDao {
-    private static final String GENRE_TABLE = "genre";
     private final NamedParameterJdbcOperations jdbc;
     private final GenreMapper genreMapper;
 
     @Override
     public int count() {
-        Integer count = jdbc.queryForObject("SELECT COUNT(*) FROM " + GENRE_TABLE,
+        Integer count = jdbc.queryForObject("SELECT COUNT(*) FROM genre",
                 Collections.emptyMap(), Integer.class);
         return count == null ? 0 : count;
     }
@@ -36,10 +35,12 @@ public class GenreDaoJdbc implements GenreDao {
 
         KeyHolder generatedKey = new GeneratedKeyHolder();
         jdbc.update(
-                "INSERT INTO " + GENRE_TABLE + " (name) VALUES(:name)",
+                "INSERT INTO genre (name) VALUES(:name)",
                 params, generatedKey);
 
-        return Optional.of(generatedKey.getKey().longValue()).orElse(0L);
+        return Optional.ofNullable(generatedKey.getKey())
+                .orElse(0L)
+                .longValue();
     }
 
     @Override
@@ -49,7 +50,7 @@ public class GenreDaoJdbc implements GenreDao {
         params.addValue("name", genre.getName());
 
         jdbc.update(
-                "UPDATE " + GENRE_TABLE + " SET name = :name WHERE id=:id",
+                "UPDATE genre SET name = :name WHERE id=:id",
                 params);
     }
 
@@ -59,7 +60,7 @@ public class GenreDaoJdbc implements GenreDao {
         params.addValue("id", id);
 
         jdbc.update(
-                "DELETE " + GENRE_TABLE + " WHERE id = :id",
+                "DELETE genre WHERE id = :id",
                 params);
     }
 
@@ -69,8 +70,8 @@ public class GenreDaoJdbc implements GenreDao {
         params.put("id", id);
 
         return jdbc.queryForObject(
-                "SELECT id, name FROM "
-                        + GENRE_TABLE + " WHERE id=:id",
+                "SELECT id, name FROM genre"
+                        + " WHERE id=:id",
                 params,
                 genreMapper
         );
@@ -79,7 +80,7 @@ public class GenreDaoJdbc implements GenreDao {
     @Override
     public List<Genre> getAll() {
         return jdbc.query(
-                "SELECT id, name FROM " + GENRE_TABLE,
+                "SELECT id, name FROM genre",
                 genreMapper);
     }
 

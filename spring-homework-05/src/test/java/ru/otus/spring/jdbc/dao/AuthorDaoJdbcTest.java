@@ -9,7 +9,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.EmptyResultDataAccessException;
 import ru.otus.spring.jdbc.domain.Author;
 
-import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -33,11 +32,11 @@ class AuthorDaoJdbcTest {
     @DisplayName(" Добавить автора ")
     @Test
     void insert() {
-        var newAuthor = new Author(0, "Jack", "Sparrow", Collections.emptyList());
+        var newAuthor = new Author(0, "Jack", "Sparrow");
         var id = dao.insert(newAuthor);
         Assertions.assertThat(id).isNotZero();
 
-        var expectedAuthor = new Author(id, "Jack", "Sparrow", Collections.emptyList());
+        var expectedAuthor = new Author(id, "Jack", "Sparrow");
         var actualAuthor = dao.getById(id);
         Assertions.assertThat(actualAuthor)
                 .isEqualTo(expectedAuthor);
@@ -46,7 +45,7 @@ class AuthorDaoJdbcTest {
     @DisplayName(" Изменить автора ")
     @Test
     void update() {
-        var updatedAuthor = new Author(1, "Jack", "Sparrow", Collections.emptyList());
+        var updatedAuthor = new Author(1, "Jack", "Sparrow");
         dao.update(updatedAuthor);
 
         assertThat(dao.getById(1)).isEqualTo(updatedAuthor);
@@ -63,7 +62,7 @@ class AuthorDaoJdbcTest {
     @DisplayName(" Получить по id автора")
     @Test
     void getById() {
-        var expectAuthor = new Author(1, "Jack", "London", Collections.emptyList());
+        var expectAuthor = new Author(1, "Jack", "London");
         var author = dao.getById(1);
         Assertions.assertThat(author).isEqualTo(expectAuthor);
     }
@@ -71,9 +70,9 @@ class AuthorDaoJdbcTest {
     @DisplayName(" Получить всех авторов ")
     @Test
     void getAll() {
-        var expectAuthor = new Author(1, "Jack", "London", Collections.emptyList());
+        var expectAuthor = new Author(1, "Jack", "London");
 
-        var newAuthor = new Author(0, "Jack", "Sparrow", Collections.emptyList());
+        var newAuthor = new Author(0, "Jack", "Sparrow");
         var id = dao.insert(newAuthor);
         Assertions.assertThat(id).isNotZero();
         var expectedNewAuthor = dao.getById(id);

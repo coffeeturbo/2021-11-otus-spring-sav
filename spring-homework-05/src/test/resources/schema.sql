@@ -26,4 +26,3 @@ CREATE TABLE book_genre (
 
 
 
-

@@ -6,7 +6,6 @@ import ru.otus.spring.jdbc.domain.Author;
 import ru.otus.spring.jdbc.domain.Book;
 import ru.otus.spring.jdbc.domain.Genre;
 
-import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,7 +18,7 @@ class BookFormatterTest {
         var formatter = new BookFormatter();
         var result = formatter.format(new Book(
                 1,
-                new Author(12, "testFirstName", "test", Collections.emptyList()),
+                new Author(12, "testFirstName", "test"),
                 "Book name",
                 List.of(
                         new Genre(1, "test1"),

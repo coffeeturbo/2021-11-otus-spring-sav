@@ -6,7 +6,6 @@ import ru.otus.spring.jdbc.domain.Author;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collections;
 
 @Component
 public class AuthorMapper implements RowMapper<Author> {
@@ -18,6 +17,6 @@ public class AuthorMapper implements RowMapper<Author> {
         var firstName = rs.getString("first_name");
         var lastName = rs.getString("last_name");
 
-        return new Author(id, firstName, lastName, Collections.emptyList());
+        return new Author(id, firstName, lastName);
     }
 }

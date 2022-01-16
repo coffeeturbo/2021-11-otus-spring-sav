@@ -53,7 +53,7 @@ public class BookServiceImpl implements BookService {
     private String save(Book book) {
         if (book.getId() == 0) {
             var id = bookDao.insert(book);
-            book = new Book(id, book.getAuthor(), book.getName(), book.getGenres());
+            book = bookDao.getById(id);
         } else {
             bookDao.update(book);
         }
