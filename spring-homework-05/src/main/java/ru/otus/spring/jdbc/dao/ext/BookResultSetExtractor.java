@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.stereotype.Component;
-import ru.otus.spring.jdbc.dao.AuthorDao;
+import ru.otus.spring.jdbc.domain.Author;
 import ru.otus.spring.jdbc.domain.Book;
 import ru.otus.spring.jdbc.domain.Genre;
 
@@ -18,8 +18,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class BookResultSetExtractor implements ResultSetExtractor<Map<Long, Book>> {
 
-    private final AuthorDao authorDao;
-
     @Override
     public Map<Long, Book> extractData(ResultSet rs) throws SQLException, DataAccessException {
 
@@ -31,9 +29,16 @@ public class BookResultSetExtractor implements ResultSetExtractor<Map<Long, Book
             var book = books.get(id);
 
             if (book == null) {
+
+                var author = new Author(
+                        rs.getLong("author_id"),
+                        rs.getString("first_name"),
+                        rs.getString("last_name")
+                );
+
                 book = new Book(
                         id,
-                        authorDao.getById(rs.getLong("author_id")),
+                        author,
                         rs.getString("name"),
                         new ArrayList<>()
                 );

@@ -87,8 +87,10 @@ public class BookDaoJdbc implements BookDao {
         HashMap<String, Object> params = new HashMap<>();
         params.put("id", id);
         return jdbc.queryForObject(
-                "SELECT id, name, author_id FROM book"
-                        + " WHERE id=:id",
+                "SELECT b.id, b.name, b.author_id, a.first_name first_name, a.last_name last_name "
+                        + " FROM book b"
+                        + " LEFT JOIN author a ON b.author_id = a.id"
+                        + " WHERE b.id=:id",
                 params,
                 bookMapper);
     }
@@ -96,8 +98,9 @@ public class BookDaoJdbc implements BookDao {
     @Override
     public List<Book> getAll() {
         var result = jdbc.query(
-                "SELECT b.id, b.name, author_id, g.id genre_id, g.name genre_name "
+                "SELECT b.id, b.name, a.first_name first_name, a.last_name last_name, author_id, g.id genre_id, g.name genre_name "
                         + " FROM book b"
+                        + " LEFT JOIN author a ON b.author_id = a.id"
                         + " LEFT JOIN book_genre ON b.id = book_genre.book_id "
                         + " LEFT JOIN genre g ON book_genre.genre_id = g.id",
                 bookResultSetExtractor);
@@ -111,9 +114,10 @@ public class BookDaoJdbc implements BookDao {
         params.addValue("genre_id", genreId);
 
         return jdbc.query(
-                "SELECT id, name, author_id"
-                        + " FROM book"
-                        + " JOIN book_genre ON book.id = book_genre.book_id"
+                "SELECT b.id, b.name, b.author_id, a.first_name first_name, a.last_name last_name"
+                        + " FROM book b"
+                        + " LEFT JOIN author a ON b.author_id = a.id"
+                        + " LEFT JOIN book_genre ON b.id = book_genre.book_id"
                         + " WHERE book_genre.genre_id = :genre_id",
                 params,
                 bookMapper);
@@ -125,8 +129,9 @@ public class BookDaoJdbc implements BookDao {
         params.addValue("author_id", authorId);
 
         return jdbc.query(
-                "SELECT b.id, b.name, b.author_id"
+                "SELECT b.id, b.name, b.author_id author_id, a.first_name first_name, a.last_name last_name"
                         + " FROM book b"
+                        + " LEFT JOIN author a ON b.author_id = a.id "
                         + " WHERE b.author_id = :author_id",
                 params,
                 bookMapper);
