@@ -1,6 +1,7 @@
 package ru.otus.spring.jdbc.dao;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class GenreDaoJdbc implements GenreDao {
@@ -66,6 +68,7 @@ public class GenreDaoJdbc implements GenreDao {
 
     @Override
     public Genre getById(long id) {
+        log.info("GenreDao getGenreById request");
         HashMap<String, Object> params = new HashMap<>();
         params.put("id", id);
 
@@ -79,6 +82,7 @@ public class GenreDaoJdbc implements GenreDao {
 
     @Override
     public List<Genre> getAll() {
+        log.info("GenreDao getAllGenres request");
         return jdbc.query(
                 "SELECT id, name FROM genre",
                 genreMapper);
@@ -86,6 +90,7 @@ public class GenreDaoJdbc implements GenreDao {
 
     @Override
     public List<Genre> getGenresByBookId(long bookId) {
+        log.info("GenreDao getGenresByBookId request");
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("book_id", bookId);
 

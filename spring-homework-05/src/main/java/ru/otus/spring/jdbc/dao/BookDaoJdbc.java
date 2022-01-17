@@ -1,6 +1,7 @@
 package ru.otus.spring.jdbc.dao;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -13,6 +14,7 @@ import ru.otus.spring.jdbc.domain.Genre;
 
 import java.util.*;
 
+@Slf4j
 @RequiredArgsConstructor
 @Repository
 public class BookDaoJdbc implements BookDao {
@@ -84,6 +86,7 @@ public class BookDaoJdbc implements BookDao {
 
     @Override
     public Book getById(long id) {
+        log.info("BookDao getBookById request");
         HashMap<String, Object> params = new HashMap<>();
         params.put("id", id);
         return jdbc.queryForObject(
@@ -97,6 +100,7 @@ public class BookDaoJdbc implements BookDao {
 
     @Override
     public List<Book> getAll() {
+        log.info("BookDao getAllBooks request");
         var result = jdbc.query(
                 "SELECT b.id, b.name, a.first_name first_name, a.last_name last_name, author_id, g.id genre_id, g.name genre_name "
                         + " FROM book b"
@@ -110,6 +114,7 @@ public class BookDaoJdbc implements BookDao {
 
     @Override
     public List<Book> getBooksByGenreId(long genreId) {
+        log.info("BookDao getBookByGenreId request");
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("genre_id", genreId);
 
@@ -125,16 +130,21 @@ public class BookDaoJdbc implements BookDao {
 
     @Override
     public List<Book> getBooksByAuthorId(long authorId) {
+        log.info("BookDao getBooksByAuthorId request");
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("author_id", authorId);
 
-        return jdbc.query(
-                "SELECT b.id, b.name, b.author_id author_id, a.first_name first_name, a.last_name last_name"
+        var result = jdbc.query(
+                "SELECT b.id, b.name, b.author_id author_id, a.first_name first_name, a.last_name last_name, g.id genre_id, g.name genre_name "
                         + " FROM book b"
                         + " LEFT JOIN author a ON b.author_id = a.id "
+                        + " LEFT JOIN book_genre ON b.id = book_genre.book_id "
+                        + " LEFT JOIN genre g ON book_genre.genre_id = g.id"
                         + " WHERE b.author_id = :author_id",
                 params,
-                bookMapper);
+                bookResultSetExtractor);
+
+        return new ArrayList<>(result.values());
     }
 
     private void insertBookGenres(long bookId, List<Genre> genres) {
