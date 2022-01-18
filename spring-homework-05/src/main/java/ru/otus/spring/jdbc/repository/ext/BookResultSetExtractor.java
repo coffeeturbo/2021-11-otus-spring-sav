@@ -1,4 +1,4 @@
-package ru.otus.spring.jdbc.dao.ext;
+package ru.otus.spring.jdbc.repository.ext;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataAccessException;

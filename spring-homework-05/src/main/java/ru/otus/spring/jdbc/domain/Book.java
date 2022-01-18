@@ -1,15 +1,30 @@
 package ru.otus.spring.jdbc.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
+import javax.persistence.*;
 import java.util.List;
 
+@Entity
+@Table(name = "book")
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
-@RequiredArgsConstructor
 public class Book {
-    private final long id;
-    private final Author author;
-    private final String name;
-    private final List<Genre> genres;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Author author;
+    @Column(name = "name")
+    private String name;
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "book_genre",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id")
+    )
+    private List<Genre> genres;
 }

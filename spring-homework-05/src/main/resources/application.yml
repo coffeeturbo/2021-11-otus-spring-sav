@@ -1,4 +1,9 @@
 spring:
+  hibernate:
+    dialect=org:
+      hibernate:
+        dialect:
+          H2Dialect:
   main:
     allow-circular-references: true
   datasource:
@@ -10,8 +15,14 @@ spring:
       mode: always
       data-locations: data.sql
       schema-locations: schema.sql
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
   h2:
     console:
       path: /h2-console
       settings:
         web-allow-others: true
+

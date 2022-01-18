@@ -1,4 +1,4 @@
-package ru.otus.spring.jdbc.dao.mapper;
+package ru.otus.spring.jdbc.repository.mapper;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;

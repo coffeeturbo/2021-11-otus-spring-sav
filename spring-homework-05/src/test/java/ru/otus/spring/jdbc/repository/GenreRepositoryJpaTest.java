@@ -1,9 +1,9 @@
-package ru.otus.spring.jdbc.dao;
+package ru.otus.spring.jdbc.repository;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.EmptyResultDataAccessException;
 import ru.otus.spring.jdbc.domain.Genre;
@@ -14,12 +14,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
 @DisplayName(" ДАО Жанра")
-@JdbcTest
-@ComponentScan(value = "ru.otus.spring.jdbc.dao")
-class GenreDaoJdbcTest {
+@DataJpaTest
+@ComponentScan(value = "ru.otus.spring.jdbc.repository")
+class GenreRepositoryJpaTest {
 
     @Autowired
-    private GenreDao dao;
+    private GenreRepository dao;
 
     @DisplayName(" Получить количество жанров ")
     @Test

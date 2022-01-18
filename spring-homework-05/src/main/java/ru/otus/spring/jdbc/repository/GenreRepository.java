@@ -1,10 +1,10 @@
-package ru.otus.spring.jdbc.dao;
+package ru.otus.spring.jdbc.repository;
 
 import ru.otus.spring.jdbc.domain.Genre;
 
 import java.util.List;
 
-public interface GenreDao {
+public interface GenreRepository {
     int count();
     long insert(Genre person);
     void update(Genre person);

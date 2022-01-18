@@ -1,4 +1,4 @@
-package ru.otus.spring.jdbc.dao;
+package ru.otus.spring.jdbc.repository;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -7,8 +7,8 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import ru.otus.spring.jdbc.dao.mapper.GenreMapper;
 import ru.otus.spring.jdbc.domain.Genre;
+import ru.otus.spring.jdbc.repository.mapper.GenreMapper;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -19,7 +19,7 @@ import java.util.Optional;
 @Slf4j
 @Repository
 @RequiredArgsConstructor
-public class GenreDaoJdbc implements GenreDao {
+public class GenreRepositoryJpa implements GenreRepository {
     private final NamedParameterJdbcOperations jdbc;
     private final GenreMapper genreMapper;
 

@@ -1,4 +1,5 @@
 INSERT INTO author (`first_name`, `last_name`) VALUES ('Jack', 'London');
+INSERT INTO author (`first_name`, `last_name`) VALUES ('Isiac', 'Asimov');
 
 
 INSERT INTO genre (`name`) VALUES ('comedy');

@@ -1,12 +1,12 @@
-package ru.otus.spring.jdbc.dao.mapper;
+package ru.otus.spring.jdbc.repository.mapper;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
-import ru.otus.spring.jdbc.dao.GenreDao;
 import ru.otus.spring.jdbc.domain.Author;
 import ru.otus.spring.jdbc.domain.Book;
 import ru.otus.spring.jdbc.domain.Genre;
+import ru.otus.spring.jdbc.repository.GenreRepository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -15,7 +15,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class BookMapper implements RowMapper<Book> {
-    private final GenreDao genreDao;
+    private final GenreRepository genreRepository;
 
     @Override
     public Book mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -26,7 +26,7 @@ public class BookMapper implements RowMapper<Book> {
         );
 
         var bookId = rs.getLong("id");
-        List<Genre> genres = genreDao.getGenresByBookId(bookId);
+        List<Genre> genres = genreRepository.getGenresByBookId(bookId);
 
         return new Book(
                 bookId,

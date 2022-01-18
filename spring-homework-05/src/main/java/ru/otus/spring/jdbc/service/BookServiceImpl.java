@@ -2,12 +2,12 @@ package ru.otus.spring.jdbc.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.otus.spring.jdbc.dao.AuthorDao;
-import ru.otus.spring.jdbc.dao.BookDao;
-import ru.otus.spring.jdbc.dao.GenreDao;
 import ru.otus.spring.jdbc.domain.Book;
 import ru.otus.spring.jdbc.domain.Genre;
 import ru.otus.spring.jdbc.formatter.BookFormatter;
+import ru.otus.spring.jdbc.repository.AuthorRepository;
+import ru.otus.spring.jdbc.repository.BookRepository;
+import ru.otus.spring.jdbc.repository.GenreRepository;
 
 import java.util.Arrays;
 import java.util.List;
@@ -17,9 +17,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
 
-    private final BookDao bookDao;
-    private final AuthorDao authorDao;
-    private final GenreDao genreDao;
+    private final BookRepository bookRepository;
+    private final AuthorRepository authorRepository;
+    private final GenreRepository genreRepository;
     private final BookFormatter bookFormatter;
 
     @Override
@@ -29,14 +29,14 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public String getAllBooks() {
-        return bookDao.getAll().stream()
+        return bookRepository.getAll().stream()
                 .map(bookFormatter::format)
                 .collect(Collectors.joining("; "));
     }
 
     @Override
     public String getBookById(long id) {
-        return bookFormatter.format(bookDao.getById(id));
+        return bookFormatter.format(bookRepository.getById(id));
     }
 
     @Override
@@ -46,28 +46,28 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public String deleteBook(long bookId) {
-        bookDao.deleteById(bookId);
+        bookRepository.deleteById(bookId);
         return String.format("Book %s was deleted", bookId);
     }
 
     private String save(Book book) {
         if (book.getId() == 0) {
-            var id = bookDao.insert(book);
-            book = bookDao.getById(id);
+            var id = bookRepository.insert(book);
+            book = bookRepository.getById(id);
         } else {
-            bookDao.update(book);
+            bookRepository.update(book);
         }
         return bookFormatter.format(book);
     }
 
     private Book bookBuilder(long bookId, long authorId, String name, String genresIds) {
-        var author = authorDao.getById(authorId);
+        var author = authorRepository.getById(authorId);
 
         List<Genre> genres = Arrays.stream(genresIds.split(","))
-                .map(id -> genreDao.getById(Long.parseLong(id)))
+                .map(id -> genreRepository.getById(Long.parseLong(id)))
                 .collect(Collectors.toList());
 
-        return new Book(bookId, author, name, genres);
+        return new Book(bookId, author.get(), name, genres);
     }
 
 }

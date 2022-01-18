@@ -1,10 +1,10 @@
-package ru.otus.spring.jdbc.dao;
+package ru.otus.spring.jdbc.repository;
 
 import ru.otus.spring.jdbc.domain.Book;
 
 import java.util.List;
 
-public interface BookDao {
+public interface BookRepository {
     int count();
     long insert(Book book);
     void update(Book book);
