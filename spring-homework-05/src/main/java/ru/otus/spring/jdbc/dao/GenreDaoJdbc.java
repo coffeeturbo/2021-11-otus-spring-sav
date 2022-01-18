@@ -9,6 +9,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import ru.otus.spring.jdbc.dao.mapper.GenreMapper;
 import ru.otus.spring.jdbc.domain.Genre;
+import ru.otus.spring.jdbc.exception.DataAccessException;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -31,7 +32,7 @@ public class GenreDaoJdbc implements GenreDao {
     }
 
     @Override
-    public long insert(Genre genre) {
+    public long insert(Genre genre) throws DataAccessException {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("name", genre.getName());
 
@@ -41,7 +42,7 @@ public class GenreDaoJdbc implements GenreDao {
                 params, generatedKey);
 
         return Optional.ofNullable(generatedKey.getKey())
-                .orElse(0L)
+                .orElseThrow(() -> new DataAccessException("can't save new author"))
                 .longValue();
     }
 

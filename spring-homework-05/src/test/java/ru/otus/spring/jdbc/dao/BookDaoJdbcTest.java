@@ -10,6 +10,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import ru.otus.spring.jdbc.domain.Author;
 import ru.otus.spring.jdbc.domain.Book;
 import ru.otus.spring.jdbc.domain.Genre;
+import ru.otus.spring.jdbc.exception.DataAccessException;
 
 import java.util.Collections;
 import java.util.List;
@@ -34,12 +35,12 @@ class BookDaoJdbcTest {
 
     @Test
     void count() {
-        assertThat(dao.count()).isEqualTo(2);
+        assertThat(dao.count()).isEqualTo(5);
     }
 
     @DisplayName(" Создать книгу ")
     @Test
-    void insert() {
+    void insert() throws DataAccessException {
         var newBook = new Book(0, author, "test book", Collections.emptyList());
         assertThat(dao.insert(newBook)).isNotZero().isGreaterThan(0);
     }
@@ -90,16 +91,14 @@ class BookDaoJdbcTest {
                 new Genre(2, "drama")
         );
 
-        var expectedBooks = List.of(
-            new Book(1, author, "Мартин Иден", genres),
-            new Book(2, author, "Любовь к жизни", Collections.emptyList())
-        );
+
 
         assertThat(dao.getAll())
                 .usingRecursiveComparison()
                 .asList()
-                .hasSize(2)
-                .containsExactlyElementsOf(expectedBooks);
+                .hasSize(5)
+                .contains(new Book(1, author, "Мартин Иден", genres))
+                .contains(new Book(2, author, "Любовь к жизни", Collections.emptyList()));
     }
 
     @DisplayName(" Получить книги по id жанра ")
@@ -117,7 +116,7 @@ class BookDaoJdbcTest {
         assertThat(dao.getBooksByGenreId(1))
                 .usingRecursiveComparison().asList()
                 .hasSize(1)
-                .containsExactlyElementsOf(expectedBooks);
+                .isEqualTo(expectedBooks);
     }
 
     @DisplayName(" Получить книги по id автора ")

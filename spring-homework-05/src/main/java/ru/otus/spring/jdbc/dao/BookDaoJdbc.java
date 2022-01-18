@@ -11,6 +11,7 @@ import ru.otus.spring.jdbc.dao.ext.BookResultSetExtractor;
 import ru.otus.spring.jdbc.dao.mapper.BookMapper;
 import ru.otus.spring.jdbc.domain.Book;
 import ru.otus.spring.jdbc.domain.Genre;
+import ru.otus.spring.jdbc.exception.DataAccessException;
 
 import java.util.*;
 
@@ -32,7 +33,7 @@ public class BookDaoJdbc implements BookDao {
     }
 
     @Override
-    public long insert(Book book) {
+    public long insert(Book book) throws DataAccessException {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("name", book.getName());
         params.addValue("author_id", book.getAuthor().getId());
@@ -44,7 +45,7 @@ public class BookDaoJdbc implements BookDao {
                 params, generatedKey);
 
         var id = Optional.ofNullable(generatedKey.getKey())
-                .orElse(0L)
+                .orElseThrow(() -> new DataAccessException("can't save new author"))
                 .longValue();
 
         if (id != 0) {
@@ -118,14 +119,18 @@ public class BookDaoJdbc implements BookDao {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("genre_id", genreId);
 
-        return jdbc.query(
-                "SELECT b.id, b.name, b.author_id, a.first_name first_name, a.last_name last_name"
-                        + " FROM book b"
-                        + " LEFT JOIN author a ON b.author_id = a.id"
-                        + " LEFT JOIN book_genre ON b.id = book_genre.book_id"
-                        + " WHERE book_genre.genre_id = :genre_id",
-                params,
-                bookMapper);
+        var result = jdbc.query(
+        "SELECT b.id, b.name, b.author_id, a.first_name first_name, a.last_name last_name, g.id genre_id, g.name genre_name "
+            + "FROM book b "
+            + "LEFT JOIN author a ON b.author_id = a.id "
+            + "JOIN book_genre ON b.id = book_genre.book_id "
+            + "JOIN genre g ON book_genre.genre_id = g.id  "
+            + "WHERE b.id in (SELECT bg.book_id FROM book_genre bg WHERE bg.genre_id = :genre_id)",
+            params,
+            bookResultSetExtractor
+        );
+
+        return new ArrayList<>(result.values());
     }
 
     @Override

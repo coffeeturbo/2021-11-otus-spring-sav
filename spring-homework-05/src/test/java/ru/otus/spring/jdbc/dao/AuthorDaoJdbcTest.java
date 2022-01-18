@@ -8,8 +8,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.EmptyResultDataAccessException;
 import ru.otus.spring.jdbc.domain.Author;
-
-import java.util.List;
+import ru.otus.spring.jdbc.exception.DataAccessException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
@@ -25,13 +24,13 @@ class AuthorDaoJdbcTest {
     @DisplayName(" Получить количество записей ")
     @Test
     void count() {
-        var expectedCount = 1;
+        var expectedCount = 2;
         assertThat(dao.count()).isEqualTo(expectedCount);
     }
 
     @DisplayName(" Добавить автора ")
     @Test
-    void insert() {
+    void insert() throws DataAccessException {
         var newAuthor = new Author(0, "Jack", "Sparrow");
         var id = dao.insert(newAuthor);
         Assertions.assertThat(id).isNotZero();
@@ -69,7 +68,7 @@ class AuthorDaoJdbcTest {
 
     @DisplayName(" Получить всех авторов ")
     @Test
-    void getAll() {
+    void getAll() throws DataAccessException {
         var expectAuthor = new Author(1, "Jack", "London");
 
         var newAuthor = new Author(0, "Jack", "Sparrow");
@@ -77,9 +76,8 @@ class AuthorDaoJdbcTest {
         Assertions.assertThat(id).isNotZero();
         var expectedNewAuthor = dao.getById(id);
 
-        var expectAuthors = List.of(expectAuthor, expectedNewAuthor);
 
-        assertThat(dao.getAll()).hasSize(2)
-                .containsExactlyElementsOf(expectAuthors);
+        assertThat(dao.getAll()).hasSize(3)
+                .contains(expectAuthor, expectedNewAuthor);
     }
 }

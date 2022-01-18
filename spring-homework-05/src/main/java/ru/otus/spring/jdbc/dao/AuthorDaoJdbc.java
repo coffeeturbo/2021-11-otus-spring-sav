@@ -9,6 +9,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import ru.otus.spring.jdbc.dao.mapper.AuthorMapper;
 import ru.otus.spring.jdbc.domain.Author;
+import ru.otus.spring.jdbc.exception.DataAccessException;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -31,7 +32,7 @@ public class AuthorDaoJdbc implements AuthorDao {
     }
 
     @Override
-    public long insert(Author author) {
+    public long insert(Author author) throws DataAccessException {
         MapSqlParameterSource params = new MapSqlParameterSource();
         params.addValue("first_name", author.getFirstName());
         params.addValue("last_name", author.getLastName());
@@ -42,7 +43,7 @@ public class AuthorDaoJdbc implements AuthorDao {
                 params, generatedKey);
 
         return Optional.ofNullable(generatedKey.getKey())
-                .orElse(0L)
+                .orElseThrow(() -> new DataAccessException("can't save new author"))
                 .longValue();
     }
 
