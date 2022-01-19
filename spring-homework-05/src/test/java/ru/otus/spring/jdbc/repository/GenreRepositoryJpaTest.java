@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.dao.EmptyResultDataAccessException;
 import ru.otus.spring.jdbc.domain.Genre;
+import ru.otus.spring.jdbc.exception.DataAccessException;
 
 import java.util.List;
 
@@ -29,7 +30,7 @@ class GenreRepositoryJpaTest {
 
     @DisplayName(" Создать жанр ")
     @Test
-    void insert() {
+    void insert() throws DataAccessException {
         var newGenre = new Genre(0, "test genre");
         var id = dao.insert(newGenre);
         assertThat(id).isNotZero();

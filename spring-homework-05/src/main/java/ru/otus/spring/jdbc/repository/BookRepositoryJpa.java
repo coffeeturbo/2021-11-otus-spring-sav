@@ -1,4 +1,4 @@
-package ru.otus.spring.jdbc.repository;
+package ru.otus.spring.jdbc.dao;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
