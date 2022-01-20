@@ -1,3 +1,7 @@
+
+--liquibase formatted sql
+
+--changeset vsavushkin:2022-01-20-001-data
 INSERT INTO author (`first_name`, `last_name`)
 VALUES ('Jack', 'London');
 INSERT INTO author (`first_name`, `last_name`)
@@ -59,6 +63,8 @@ INSERT INTO comment (`text`, `book_id`)
 VALUES ('Так себе', 2);
 INSERT INTO comment (`text`, `book_id`)
 VALUES ('читать не буду', 3);
+
+--changeset stvort:2022-01-20-002-comment-data
 
 INSERT INTO comment (`text`, `book_id`)
 VALUES ('Отличная книга читал до упада', 4);
