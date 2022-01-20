@@ -5,78 +5,87 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.dao.EmptyResultDataAccessException;
 import ru.otus.spring.jdbc.domain.Author;
 import ru.otus.spring.jdbc.domain.Book;
 import ru.otus.spring.jdbc.domain.Genre;
-import ru.otus.spring.jdbc.exception.DataAccessException;
 
-import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCode;
 
-@DisplayName(" ДАО Книги ")
+@DisplayName(" Репозиторий Книги ")
 @DataJpaTest
 @ComponentScan(value = "ru.otus.spring.jdbc.repository")
 class BookRepositoryJpaTest {
 
     @Autowired
-    private BookRepository dao;
+    private BookRepository bookRepository;
+    @Autowired
+    private AuthorRepository authorRepository;
+
+    @Autowired
+    private TestEntityManager entityManager;
 
     private Author author;
 
     @BeforeEach
     void init() {
-        author = new Author(1, "Jack", "London");
+        author = authorRepository.getById(1)
+                .orElseThrow();
     }
 
+    @DisplayName(" Получает количество книг ")
     @Test
     void count() {
-        assertThat(dao.count()).isEqualTo(5);
+        assertThat(bookRepository.count()).isEqualTo(8);
     }
 
     @DisplayName(" Создать книгу ")
     @Test
-    void insert() throws DataAccessException {
-        var newBook = new Book(0, author, "test book", Collections.emptyList());
-        assertThat(dao.insert(newBook)).isNotZero().isGreaterThan(0);
+    void insert() {
+        var newBook = Book.builder().author(author).name("test book").build();
+        newBook = bookRepository.save(newBook);
+        var actualBook = entityManager.find(Book.class, newBook.getId());
+        assertThat(newBook.getId()).isNotNull().isGreaterThan(0);
+        assertThat(actualBook).isNotNull()
+                .usingRecursiveComparison()
+                .isEqualTo(newBook);
     }
 
     @DisplayName(" Изменить книгу ")
     @Test
     void update() {
-        List<Genre> genres = List.of(
-                new Genre(1, "comedy")
-        );
+        var genres = List.of(Genre.builder().id(1).name("comedy").build());
 
-        var updateBook = new Book(1, author, "test book", genres);
-        dao.update(updateBook);
-        assertThat(dao.getById(1))
-                .usingRecursiveComparison()
+        var updateBook = Book.builder()
+                .id(1)
+                .author(author)
+                .genres(genres)
+                .name("test book")
+        .build();
+
+        updateBook = bookRepository.save(updateBook);
+        var actualBook = entityManager.find(Book.class, updateBook.getId());
+        assertThat(actualBook)
+                .isNotNull()
+                .isExactlyInstanceOf(Book.class)
                 .isEqualTo(updateBook);
     }
 
     @DisplayName(" Удалить книгу по id ")
     @Test
     void deleteById() {
-        dao.deleteById(1);
-        assertThatCode(() -> dao.getById(1))
-                .isExactlyInstanceOf(EmptyResultDataAccessException.class);
+        bookRepository.deleteById(1);
+        assertThat(entityManager.find(Book.class, 1L)).isNull();
     }
 
     @DisplayName(" Получить книгу по id ")
     @Test
     void getById() {
-        List<Genre> genres = List.of(
-             new Genre(1, "comedy"),
-             new Genre(2, "drama")
-        );
-
-        var expectedBook = new Book(1, author, "Мартин Иден", genres);
-        assertThat(dao.getById(1))
+        var expectedBook = entityManager.find(Book.class, 1L);
+        assertThat(bookRepository.getById(1)).isPresent().get()
                 .usingRecursiveComparison()
                 .isNotNull()
                 .isEqualTo(expectedBook);
@@ -86,54 +95,15 @@ class BookRepositoryJpaTest {
     @Test
     void getAll() {
 
-        List<Genre> genres = List.of(
-                new Genre(1, "comedy"),
-                new Genre(2, "drama")
-        );
-
-
-
-        assertThat(dao.getAll())
-                .usingRecursiveComparison()
-                .asList()
-                .hasSize(5)
-                .contains(new Book(1, author, "Мартин Иден", genres))
-                .contains(new Book(2, author, "Любовь к жизни", Collections.emptyList()));
-    }
-
-    @DisplayName(" Получить книги по id жанра ")
-    @Test
-    void getBooksByGenreId() {
-        List<Genre> genres = List.of(
-                new Genre(1, "comedy"),
-                new Genre(2, "drama")
-        );
-
-        var expectedBooks = List.of(
-                new Book(1, author, "Мартин Иден", genres)
-        );
-
-        assertThat(dao.getBooksByGenreId(1))
-                .usingRecursiveComparison().asList()
-                .hasSize(1)
-                .isEqualTo(expectedBooks);
-    }
-
-    @DisplayName(" Получить книги по id автора ")
-    @Test
-    void getBooksByAuthorId() {
-        List<Genre> genres = List.of(
-                new Genre(1, "comedy"),
-                new Genre(2, "drama")
-        );
-        var expectedBooks = List.of(
-                new Book(1, author, "Мартин Иден", genres),
-                new Book(2, author, "Любовь к жизни", Collections.emptyList())
-        );
-
-        assertThat(dao.getBooksByAuthorId(1))
-                .usingRecursiveComparison().asList()
-                .hasSize(2)
-                .containsExactlyElementsOf(expectedBooks);
+        var books = bookRepository.getAll();
+        assertThat(books)
+                .isNotNull()
+                .hasSize(8)
+                .allMatch(book -> book.getId() != 0)
+                .allMatch(book -> book.getAuthor() != null
+                        && !book.getAuthor().getFirstName().equals(""))
+                .allMatch(book -> book.getComments() != null
+                        && book.getComments().size() >= 0)
+                .allMatch(book -> book.getGenres().size() >= 0);
     }
 }

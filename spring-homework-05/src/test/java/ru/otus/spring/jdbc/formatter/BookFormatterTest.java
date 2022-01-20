@@ -16,15 +16,17 @@ class BookFormatterTest {
     @Test
     void format() {
         var formatter = new BookFormatter();
-        var result = formatter.format(new Book(
-                1,
-                new Author(12, "testFirstName", "test"),
-                "Book name",
-                List.of(
-                        new Genre(1, "test1"),
-                        new Genre(2, "test2")
-                )
-        ));
+        var result = formatter.format(
+            Book.builder()
+                .id(1)
+                .author(new Author(12, "testFirstName", "test"))
+                .name("Book name")
+                .genres(List.of(
+                    Genre.builder().id(1).name("test1").build(),
+                    Genre.builder().id(2).name("test2").build()
+                ))
+            .build()
+        );
         assertThat(result).isEqualTo("ID: 1, AuthorName: testFirstNametest, NAME: Book name, GENRES: test1, test2");
     }
 }

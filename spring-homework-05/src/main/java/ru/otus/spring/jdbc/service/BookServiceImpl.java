@@ -46,7 +46,7 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public String getBookById(long id) {
-        return bookFormatter.format(bookRepository.getById(id));
+        return bookFormatter.format(bookRepository.getById(id).orElseThrow());
     }
 
     @Override
@@ -67,23 +67,18 @@ public class BookServiceImpl implements BookService {
     }
 
     private String save(Book book) throws DataAccessException {
-        if (book.getId() == 0) {
-            var id = bookRepository.insert(book);
-            book = bookRepository.getById(id);
-        } else {
-            bookRepository.update(book);
-        }
+        bookRepository.save(book);
         return bookFormatter.format(book);
     }
 
     private Book bookBuilder(long bookId, long authorId, String name, String genresIds) {
-        var author = authorRepository.getById(authorId);
+        var author = authorRepository.getById(authorId).orElseThrow();
 
         List<Genre> genres = Arrays.stream(genresIds.split(","))
-                .map(id -> genreRepository.getById(Long.parseLong(id)))
+                .map(id -> genreRepository.getById(Long.parseLong(id)).orElseThrow())
                 .collect(Collectors.toList());
 
-        return new Book(bookId, author.get(), name, genres);
+        return Book.builder().id(bookId).author(author).name(name).genres(genres).build();
     }
 
 }

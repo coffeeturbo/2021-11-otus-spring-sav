@@ -46,7 +46,7 @@ class BookServiceImplTest {
                 ));
     }
 
-    @DisplayName(" Получть книгу по id ")
+    @DisplayName(" Получить книгу по id ")
     @Test
     void getBookById() {
         var book = bookService.getBookById(1);

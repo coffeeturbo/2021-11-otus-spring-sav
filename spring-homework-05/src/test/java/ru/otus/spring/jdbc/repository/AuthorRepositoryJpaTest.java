@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class AuthorRepositoryJpaTest {
 
     @Autowired
-    private AuthorRepository dao;
+    private AuthorRepository authorRepository;
 
     @Autowired
     private TestEntityManager em;
@@ -25,15 +25,15 @@ class AuthorRepositoryJpaTest {
     @DisplayName(" Получить количество записей ")
     @Test
     void count() {
-        var expectedCount = 2;
-        assertThat(dao.count()).isEqualTo(expectedCount);
+        var expectedCount = 3;
+        assertThat(authorRepository.count()).isEqualTo(expectedCount);
     }
 
     @DisplayName(" Добавить автора ")
     @Test
     void insert() {
         var newAuthor = new Author(0, "Jack", "Sparrow");
-        dao.save(newAuthor);
+        authorRepository.save(newAuthor);
 
         assertThat(newAuthor.getId()).isGreaterThan(0);
         var actualAuthor = em.find(Author.class, newAuthor.getId());
@@ -46,7 +46,7 @@ class AuthorRepositoryJpaTest {
     @Test
     void update() {
         var updatedAuthor = new Author(1, "Jack", "Sparrow");
-        dao.save(updatedAuthor);
+        authorRepository.save(updatedAuthor);
 
         var actualAuthor = em.find(Author.class, 1L);
 
@@ -58,7 +58,7 @@ class AuthorRepositoryJpaTest {
     @DisplayName(" Удалить автора по id ")
     @Test
     void deleteByIdSuccess() {
-        dao.deleteById(1);
+        authorRepository.deleteById(1);
         var deletedAuthor = em.find(Author.class, 1L);
         assertThat(deletedAuthor).isNull();
     }
@@ -66,7 +66,7 @@ class AuthorRepositoryJpaTest {
     @DisplayName(" Получить по id автора")
     @Test
     void getById() {
-        var author = dao.getById(1);
+        var author = authorRepository.getById(1);
         var expectAuthor = em.find(Author.class, 1L);
         Assertions.assertThat(author)
                 .isPresent().get()
@@ -77,8 +77,8 @@ class AuthorRepositoryJpaTest {
     @DisplayName(" Получить всех авторов ")
     @Test
     void getAll() {
-        var actualAuthors = dao.getAll();
-        assertThat(actualAuthors).isNotNull().hasSize(2)
+        var actualAuthors = authorRepository.getAll();
+        assertThat(actualAuthors).isNotNull().hasSize(3)
                 .allMatch(author -> !author.getLastName().equals(""))
                 .allMatch(author -> !author.getFirstName().equals(""))
                 .allMatch(author -> author.getId() != 0);

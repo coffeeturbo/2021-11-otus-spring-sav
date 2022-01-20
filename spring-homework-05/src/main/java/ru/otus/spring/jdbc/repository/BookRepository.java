@@ -1,17 +1,14 @@
 package ru.otus.spring.jdbc.repository;
 
 import ru.otus.spring.jdbc.domain.Book;
-import ru.otus.spring.jdbc.exception.DataAccessException;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface BookRepository {
-    int count();
-    long insert(Book book) throws DataAccessException;
-    void update(Book book);
+    long count();
+    Book save(Book book);
     void deleteById(long id);
-    Book getById(long id);
+    Optional<Book> getById(long id);
     List<Book> getAll();
-    List<Book> getBooksByGenreId(long genreId);
-    List<Book> getBooksByAuthorId(long authorId);
 }
