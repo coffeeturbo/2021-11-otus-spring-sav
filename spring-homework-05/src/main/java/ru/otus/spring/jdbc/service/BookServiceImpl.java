@@ -3,6 +3,7 @@ package ru.otus.spring.jdbc.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.jdbc.domain.Book;
 import ru.otus.spring.jdbc.domain.Genre;
 import ru.otus.spring.jdbc.exception.DataAccessException;
@@ -37,6 +38,7 @@ public class BookServiceImpl implements BookService {
         return rsl;
     }
 
+    @Transactional
     @Override
     public String getAllBooks() {
         return bookRepository.getAll().stream()
