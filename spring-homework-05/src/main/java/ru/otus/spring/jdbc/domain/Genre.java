@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "genre")
@@ -21,7 +20,4 @@ public class Genre {
 
     @Column(name = "name", nullable = false)
     private String name;
-
-    @ManyToMany(mappedBy = "genres", fetch = FetchType.LAZY)
-    private List<Book> books;
 }

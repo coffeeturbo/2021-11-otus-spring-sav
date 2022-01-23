@@ -44,7 +44,10 @@ public class Book {
     private List<Genre> genres;
 
     @BatchSize(size = 10)
-    @OneToMany(targetEntity = Comment.class, cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "book_id")
+    @OneToMany(targetEntity = Comment.class,
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            mappedBy = "book"
+    )
     private List<Comment> comments;
 }

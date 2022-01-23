@@ -11,7 +11,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName(" Сервис Книг ")
+@DisplayName("Сервис Книг")
 @Transactional
 @SpringBootTest
 class BookServiceImplTest {
@@ -19,7 +19,7 @@ class BookServiceImplTest {
     @Autowired
     BookService bookService;
 
-    @DisplayName(" Создать новую книгу ")
+    @DisplayName("Создать новую книгу")
     @Rollback
     @Test
     void createBook() {
@@ -27,7 +27,7 @@ class BookServiceImplTest {
         assertThat(result).contains("AuthorName: JackLondon, NAME: testBook, GENRES: comedy, drama");
     }
 
-    @DisplayName(" Создать новую книгу c жанрами ")
+    @DisplayName("Создать новую книгу c жанрами")
     @Rollback
     @Test
     void createBookWithGenres() {
@@ -35,7 +35,7 @@ class BookServiceImplTest {
         assertThat(result).contains("AuthorName: JackLondon, NAME: testBook, GENRES: comedy, drama");
     }
 
-    @DisplayName(" Получить все книги ")
+    @DisplayName("Получить все книги")
     @Test
     void getAllBooks() {
         var books = bookService.getAllBooks();
@@ -46,14 +46,14 @@ class BookServiceImplTest {
                 ));
     }
 
-    @DisplayName(" Получить книгу по id ")
+    @DisplayName("Получить книгу по id")
     @Test
     void getBookById() {
         var book = bookService.getBookById(1);
         assertThat(book).isEqualTo("ID: 1, AuthorName: JackLondon, NAME: Мартин Иден, GENRES: comedy, drama");
     }
 
-    @DisplayName(" Изменить книгу ")
+    @DisplayName("Изменить книгу")
     @Rollback
     @Test
     void updateBook() {
@@ -61,7 +61,7 @@ class BookServiceImplTest {
         assertThat(book).isEqualTo("ID: 1, AuthorName: JackLondon, NAME: updatedBook, GENRES: comedy, drama");
     }
 
-    @DisplayName(" Удалить книгу ")
+    @DisplayName("Удалить книгу")
     @Rollback
     @Test
     void deleteBook() {
