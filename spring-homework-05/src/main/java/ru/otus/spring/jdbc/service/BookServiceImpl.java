@@ -26,6 +26,7 @@ public class BookServiceImpl implements BookService {
     private final GenreRepository genreRepository;
     private final BookFormatter bookFormatter;
 
+    @Transactional
     @Override
     public String createBook(long authorId, String name, String genresIds) {
 
@@ -38,7 +39,7 @@ public class BookServiceImpl implements BookService {
         return rsl;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public String getAllBooks() {
         return bookRepository.getAll().stream()
@@ -46,11 +47,13 @@ public class BookServiceImpl implements BookService {
                 .collect(Collectors.joining("; "));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public String getBookById(long id) {
         return bookFormatter.format(bookRepository.getById(id).orElseThrow());
     }
 
+    @Transactional
     @Override
     public String updateBook(long bookId, long authorId, String name, String genresIds) {
         var rsl = "";
@@ -62,6 +65,7 @@ public class BookServiceImpl implements BookService {
         return rsl;
     }
 
+    @Transactional
     @Override
     public String deleteBook(long bookId) {
         bookRepository.deleteById(bookId);

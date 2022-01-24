@@ -10,12 +10,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 @DisplayName("Сервис Комментариев")
-@Transactional
 @SpringBootTest
 class CommentServiceImplTest {
 
     @Autowired
-    CommentService commentService;
+    private CommentService commentService;
 
     @DisplayName("Создает комментарий")
     @Test
@@ -57,6 +56,7 @@ class CommentServiceImplTest {
                 .isEqualTo(String.format("Comment with ID: %s was deleted", commentId));
     }
 
+    @Transactional
     @DisplayName("Изменяет комментарий")
     @Test
     void updateComment() {

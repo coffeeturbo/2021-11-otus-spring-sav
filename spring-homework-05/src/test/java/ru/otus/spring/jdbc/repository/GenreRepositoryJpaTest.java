@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
 import ru.otus.spring.jdbc.domain.Genre;
 import ru.otus.spring.jdbc.exception.DataAccessException;
 
@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName(" Репозиторий Жанра")
 @DataJpaTest
-@ComponentScan(value = "ru.otus.spring.jdbc.repository")
+@Import(GenreRepositoryJpa.class)
 class GenreRepositoryJpaTest {
 
     @Autowired

@@ -8,10 +8,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-@NamedEntityGraph(name = "book-entity-graph",
-        attributeNodes = {
-                @NamedAttributeNode("book")
-        })
 @Entity
 @Table(name = "comment")
 @AllArgsConstructor

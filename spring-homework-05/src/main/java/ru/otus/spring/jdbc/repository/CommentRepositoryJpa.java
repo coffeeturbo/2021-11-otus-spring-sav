@@ -48,9 +48,7 @@ public class CommentRepositoryJpa implements CommentRepository {
 
     @Override
     public List<Comment> getAll() {
-        var entityGraph = em.getEntityGraph("book-entity-graph");
         var query = em.createQuery("select c from Comment c", Comment.class);
-        query.setHint("javax.persistence.fetchgraph", entityGraph);
         return query.getResultList();
     }
 }

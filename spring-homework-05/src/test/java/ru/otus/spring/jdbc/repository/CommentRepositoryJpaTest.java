@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
 import ru.otus.spring.jdbc.domain.Book;
 import ru.otus.spring.jdbc.domain.Comment;
 
@@ -13,13 +13,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName(" Репозиторий комментариев ")
 @DataJpaTest
-@ComponentScan(value = "ru.otus.spring.jdbc.repository")
+@Import(CommentRepositoryJpa.class)
 class CommentRepositoryJpaTest {
     @Autowired
-    TestEntityManager em;
+    private TestEntityManager em;
 
     @Autowired
-    CommentRepository commentRepository;
+    private CommentRepository commentRepository;
 
     @DisplayName(" Получает количество комментариев ")
     @Test

@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class BookServiceImplTest {
 
     @Autowired
-    BookService bookService;
+    private BookService bookService;
 
     @DisplayName("Создать новую книгу")
     @Rollback

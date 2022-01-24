@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
 import ru.otus.spring.jdbc.domain.Author;
 import ru.otus.spring.jdbc.domain.Book;
 import ru.otus.spring.jdbc.domain.Genre;
@@ -17,13 +17,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName(" Репозиторий Книги ")
 @DataJpaTest
-@ComponentScan(value = "ru.otus.spring.jdbc.repository")
+@Import(BookRepositoryJpa.class)
 class BookRepositoryJpaTest {
 
     @Autowired
     private BookRepository bookRepository;
-    @Autowired
-    private AuthorRepository authorRepository;
 
     @Autowired
     private TestEntityManager entityManager;
@@ -32,17 +30,16 @@ class BookRepositoryJpaTest {
 
     @BeforeEach
     void init() {
-        author = authorRepository.getById(1)
-                .orElseThrow();
+        author = entityManager.find(Author.class, 1L);
     }
 
-    @DisplayName(" Получает количество книг ")
+    @DisplayName("Получает количество книг")
     @Test
     void count() {
         assertThat(bookRepository.count()).isEqualTo(8);
     }
 
-    @DisplayName(" Создать книгу ")
+    @DisplayName("Создать книгу")
     @Test
     void insert() {
         var newBook = Book.builder().author(author).name("test book").build();
@@ -54,7 +51,7 @@ class BookRepositoryJpaTest {
                 .isEqualTo(newBook);
     }
 
-    @DisplayName(" Изменить книгу ")
+    @DisplayName("Изменить книгу")
     @Test
     void update() {
         var genres = List.of(Genre.builder().id(1).name("comedy").build());
@@ -64,7 +61,7 @@ class BookRepositoryJpaTest {
                 .author(author)
                 .genres(genres)
                 .name("test book")
-        .build();
+                .build();
 
         updateBook = bookRepository.save(updateBook);
         var actualBook = entityManager.find(Book.class, updateBook.getId());
@@ -74,14 +71,14 @@ class BookRepositoryJpaTest {
                 .isEqualTo(updateBook);
     }
 
-    @DisplayName(" Удалить книгу по id ")
+    @DisplayName("Удалить книгу по id")
     @Test
     void deleteById() {
         bookRepository.deleteById(1);
         assertThat(entityManager.find(Book.class, 1L)).isNull();
     }
 
-    @DisplayName(" Получить книгу по id ")
+    @DisplayName("Получить книгу по id")
     @Test
     void getById() {
         var expectedBook = entityManager.find(Book.class, 1L);
@@ -91,10 +88,9 @@ class BookRepositoryJpaTest {
                 .isEqualTo(expectedBook);
     }
 
-    @DisplayName(" Получить все книги ")
+    @DisplayName("Получить все книги")
     @Test
     void getAll() {
-
         var books = bookRepository.getAll();
         assertThat(books)
                 .isNotNull()
@@ -102,8 +98,6 @@ class BookRepositoryJpaTest {
                 .allMatch(book -> book.getId() != 0)
                 .allMatch(book -> book.getAuthor() != null
                         && !book.getAuthor().getFirstName().equals(""))
-                .allMatch(book -> book.getComments() != null
-                        && book.getComments().size() >= 0)
                 .allMatch(book -> book.getGenres().size() >= 0);
     }
 }

@@ -2,6 +2,7 @@ package ru.otus.spring.jdbc.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.jdbc.domain.Comment;
 import ru.otus.spring.jdbc.formatter.CommentFormatter;
 import ru.otus.spring.jdbc.repository.BookRepository;
@@ -17,6 +18,7 @@ public class CommentServiceImpl implements CommentService {
     private final BookRepository bookRepository;
     private final CommentFormatter formatter;
 
+    @Transactional
     @Override
     public String createComment(long bookId, String text) {
         var book = bookRepository.getById(bookId);
@@ -25,6 +27,7 @@ public class CommentServiceImpl implements CommentService {
         return formatter.format(comment);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public String getAllComments() {
         var books = commentRepository.getAll();
@@ -33,17 +36,20 @@ public class CommentServiceImpl implements CommentService {
                 .collect(Collectors.joining(", "));
     }
 
+    @Transactional(readOnly = true)
     @Override
     public String getCommentById(long commentId) {
         return formatter.format(commentRepository.getById(commentId).orElseThrow());
     }
 
+    @Transactional
     @Override
     public String deleteById(long commentId) {
         commentRepository.deleteById(commentId);
         return String.format("Comment with ID: %s was deleted", commentId);
     }
 
+    @Transactional
     @Override
     public String updateComment(long commentId, long bookId, String text) {
         var book = bookRepository.getById(bookId);
