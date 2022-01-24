@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
 import ru.otus.spring.jdbc.domain.Book;
 import ru.otus.spring.jdbc.domain.Comment;
 
@@ -13,8 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName(" Репозиторий комментариев ")
 @DataJpaTest
-@Import(CommentRepositoryJpa.class)
-class CommentRepositoryJpaTest {
+class CommentRepositoryTest {
     @Autowired
     private TestEntityManager em;
 
@@ -72,7 +70,7 @@ class CommentRepositoryJpaTest {
     @DisplayName(" Получает все комментарии ")
     @Test
     void testGetAll() {
-        var result = commentRepository.getAll();
+        var result = commentRepository.findAll();
         assertThat(result).isNotNull()
                 .hasSize(10)
                 .allMatch(comment -> comment.getId() != 0)

@@ -1,14 +1,17 @@
 package ru.otus.spring.jdbc.repository;
 
+import org.springframework.data.repository.CrudRepository;
 import ru.otus.spring.jdbc.domain.Comment;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface CommentRepository {
-    long count();
-    Comment save(Comment book);
+public interface CommentRepository extends CrudRepository<Comment, Long> {
+
     void deleteById(long id);
+
     Optional<Comment> getById(long id);
-    List<Comment> getAll();
+
+    @Override
+    List<Comment> findAll();
 }

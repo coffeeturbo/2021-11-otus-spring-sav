@@ -5,9 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
 import ru.otus.spring.jdbc.domain.Genre;
-import ru.otus.spring.jdbc.exception.DataAccessException;
 
 import java.util.Objects;
 
@@ -15,8 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName(" Репозиторий Жанра")
 @DataJpaTest
-@Import(GenreRepositoryJpa.class)
-class GenreRepositoryJpaTest {
+class GenreRepositoryTest {
 
     @Autowired
     private GenreRepository dao;
@@ -32,7 +29,7 @@ class GenreRepositoryJpaTest {
 
     @DisplayName(" Создать жанр ")
     @Test
-    void insert() throws DataAccessException {
+    void insert() {
         var newGenre = Genre.builder().name("test genre").build();
         var genre = dao.save(newGenre);
         assertThat(genre.getId()).isNotZero();
@@ -70,7 +67,7 @@ class GenreRepositoryJpaTest {
     @DisplayName(" Получить все жанры ")
     @Test
     void getAll() {
-        assertThat(dao.getAll())
+        assertThat(dao.findAll())
                 .isNotNull()
                 .hasSize(3)
                 .allMatch(Objects::nonNull)

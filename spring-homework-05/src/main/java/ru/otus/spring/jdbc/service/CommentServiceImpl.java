@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.jdbc.domain.Comment;
 import ru.otus.spring.jdbc.formatter.CommentFormatter;
 import ru.otus.spring.jdbc.repository.BookRepository;
-import ru.otus.spring.jdbc.repository.CommentRepositoryJpa;
+import ru.otus.spring.jdbc.repository.CommentRepository;
 
 import java.util.stream.Collectors;
 
@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
 
-    private final CommentRepositoryJpa commentRepository;
+    private final CommentRepository commentRepository;
     private final BookRepository bookRepository;
     private final CommentFormatter formatter;
 
@@ -30,7 +30,7 @@ public class CommentServiceImpl implements CommentService {
     @Transactional(readOnly = true)
     @Override
     public String getAllComments() {
-        var books = commentRepository.getAll();
+        var books = commentRepository.findAll();
         return books.stream()
                 .map(formatter::format)
                 .collect(Collectors.joining(", "));
