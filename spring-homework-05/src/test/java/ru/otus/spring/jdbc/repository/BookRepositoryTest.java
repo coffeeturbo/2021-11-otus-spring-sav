@@ -72,8 +72,8 @@ class BookRepositoryTest {
     @DisplayName("Удалить книгу по id")
     @Test
     void deleteById() {
-        bookRepo.deleteById(1);
-        assertThat(entityManager.find(Book.class, 1L)).isNull();
+        bookRepo.deleteById(10);
+        assertThat(entityManager.find(Book.class, 10L)).isNull();
     }
 
     @DisplayName("Получить книгу по id")
