@@ -45,8 +45,8 @@ class BookServiceImplTest {
     @DisplayName("Получить книгу по id")
     @Test
     void getBookById() {
-        var book = bookService.getBookById(6);
-        assertThat(book).isEqualTo("ID: 6, AuthorName: CarlMarks, NAME: Капитал, GENRES: science");
+        var book = bookService.getBookById(4);
+        assertThat(book).isEqualTo("ID: 4, AuthorName: IsiacAsimov, NAME: Основание, GENRES: ");
     }
 
     @DisplayName("Изменить книгу")
