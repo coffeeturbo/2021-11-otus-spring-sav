@@ -1,5 +1,6 @@
 package ru.otus.spring.jdbc.repository;
 
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.repository.CrudRepository;
 import ru.otus.spring.jdbc.domain.Book;
 
@@ -12,6 +13,12 @@ public interface BookRepository extends CrudRepository<Book, Long> {
 
     Optional<Book> getById(long id);
 
+    @EntityGraph(
+            type = EntityGraph.EntityGraphType.FETCH,
+            attributePaths = {
+                    "author"
+            }
+    )
     @Override
     List<Book> findAll();
 }

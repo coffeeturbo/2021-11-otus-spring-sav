@@ -15,7 +15,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName(" Репозиторий Книги ")
+@DisplayName("Репозиторий Книги")
 @DataJpaTest
 class BookRepositoryTest {
 
