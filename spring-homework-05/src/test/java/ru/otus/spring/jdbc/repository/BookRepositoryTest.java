@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.jdbc.domain.Author;
 import ru.otus.spring.jdbc.domain.Book;
 import ru.otus.spring.jdbc.domain.Genre;
@@ -69,11 +70,12 @@ class BookRepositoryTest {
                 .isEqualTo(updateBook);
     }
 
+    @Transactional
     @DisplayName("Удалить книгу по id")
     @Test
     void deleteById() {
-        bookRepo.deleteById(10);
-        assertThat(entityManager.find(Book.class, 10L)).isNull();
+        bookRepo.deleteById(8);
+        assertThat(entityManager.find(Book.class, 8L)).isNull();
     }
 
     @DisplayName("Получить книгу по id")

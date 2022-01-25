@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -55,6 +56,7 @@ class BookServiceImplTest {
         assertThat(book).isEqualTo("ID: 8, AuthorName: JackLondon, NAME: updatedBook, GENRES: comedy, drama");
     }
 
+    @Transactional
     @DisplayName("Удалить книгу")
     @Test
     void deleteBook() {
