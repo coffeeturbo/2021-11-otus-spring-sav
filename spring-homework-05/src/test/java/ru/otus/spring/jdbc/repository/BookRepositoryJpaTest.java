@@ -74,8 +74,8 @@ class BookRepositoryJpaTest {
     @DisplayName("Удалить книгу по id")
     @Test
     void deleteById() {
-        bookRepository.deleteById(1);
-        assertThat(entityManager.find(Book.class, 1L)).isNull();
+        bookRepository.deleteById(10);
+        assertThat(entityManager.find(Book.class, 10L)).isNull();
     }
 
     @DisplayName("Получить книгу по id")

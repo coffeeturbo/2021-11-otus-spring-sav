@@ -11,7 +11,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Transactional
 @DisplayName(" Книги Shell команды ")
 @SpringBootTest
 class CommentShellCommandsTest {
@@ -37,6 +36,7 @@ class CommentShellCommandsTest {
         assertThat(res).isEqualTo("ID: 1, BOOK_ID: 1, TEXT: Ужасная книга читал до упада");
     }
 
+    @Transactional
     @DisplayName("Создает комментарий")
     @Test
     void createComent() {
@@ -44,6 +44,7 @@ class CommentShellCommandsTest {
         assertThat(res).isEqualTo("ID: 11, BOOK_ID: 1, TEXT: commentText");
     }
 
+    @Transactional
     @DisplayName("Изменяет комментарий")
     @Test
     void updateComment() {
@@ -51,6 +52,7 @@ class CommentShellCommandsTest {
         assertThat(res).isEqualTo("ID: 2, BOOK_ID: 2, TEXT: commentText");
     }
 
+    @Transactional
     @DisplayName("Удаляет комментарий по id")
     @Test
     void deleteComment() {

@@ -4,7 +4,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -19,10 +18,10 @@ class CommentServiceImplTest {
     @DisplayName("Создает комментарий")
     @Test
     void createComment() {
-        var comment = commentService.createComment(1L, "test comment");
+        var comment = commentService.createComment(2L, "test comment");
         assertThat(comment)
                 .isNotNull()
-                .contains("BOOK_ID: 1, TEXT: test comment");
+                .contains("BOOK_ID: 2, TEXT: test comment");
     }
 
     @DisplayName("Получает все комментарии")
@@ -56,13 +55,12 @@ class CommentServiceImplTest {
                 .isEqualTo(String.format("Comment with ID: %s was deleted", commentId));
     }
 
-    @Transactional
     @DisplayName("Изменяет комментарий")
     @Test
     void updateComment() {
-        var updatedComment = commentService.updateComment(1, 1, "updatedText");
+        var updatedComment = commentService.updateComment(8, 1, "updatedText");
         assertThat(updatedComment)
                 .isNotNull()
-                .isEqualTo("ID: 1, BOOK_ID: 1, TEXT: updatedText");
+                .isEqualTo("ID: 8, BOOK_ID: 1, TEXT: updatedText");
     }
 }
