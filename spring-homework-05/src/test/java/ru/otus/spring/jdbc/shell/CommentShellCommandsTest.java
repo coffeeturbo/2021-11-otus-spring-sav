@@ -11,7 +11,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName(" Книги Shell команды ")
+@DisplayName("Комментарии Shell команды")
 @SpringBootTest
 class CommentShellCommandsTest {
 

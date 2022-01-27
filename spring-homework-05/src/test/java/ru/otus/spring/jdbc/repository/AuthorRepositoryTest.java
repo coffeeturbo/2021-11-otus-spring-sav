@@ -6,15 +6,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
 import ru.otus.spring.jdbc.domain.Author;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName(" Репозиторий Автора ")
 @DataJpaTest
-@Import(AuthorRepositoryJpa.class)
-class AuthorRepositoryJpaTest {
+class AuthorRepositoryTest {
 
     @Autowired
     private AuthorRepository authorRepository;
@@ -77,7 +75,7 @@ class AuthorRepositoryJpaTest {
     @DisplayName(" Получить всех авторов ")
     @Test
     void getAll() {
-        var actualAuthors = authorRepository.getAll();
+        var actualAuthors = authorRepository.findAll();
         assertThat(actualAuthors).isNotNull().hasSize(3)
                 .allMatch(author -> !author.getLastName().equals(""))
                 .allMatch(author -> !author.getFirstName().equals(""))

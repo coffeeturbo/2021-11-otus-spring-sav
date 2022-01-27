@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
 
-    private final BookRepository bookRepository;
+    private final BookRepository bookRepo;
     private final AuthorRepository authorRepository;
     private final GenreRepository genreRepository;
     private final BookFormatter bookFormatter;
@@ -42,7 +42,7 @@ public class BookServiceImpl implements BookService {
     @Transactional(readOnly = true)
     @Override
     public String getAllBooks() {
-        return bookRepository.getAll().stream()
+        return bookRepo.findAll().stream()
                 .map(bookFormatter::format)
                 .collect(Collectors.joining("; "));
     }
@@ -50,7 +50,7 @@ public class BookServiceImpl implements BookService {
     @Transactional(readOnly = true)
     @Override
     public String getBookById(long id) {
-        return bookFormatter.format(bookRepository.getById(id).orElseThrow());
+        return bookFormatter.format(bookRepo.getById(id).orElseThrow());
     }
 
     @Transactional
@@ -68,12 +68,12 @@ public class BookServiceImpl implements BookService {
     @Transactional
     @Override
     public String deleteBook(long bookId) {
-        bookRepository.deleteById(bookId);
+        bookRepo.deleteById(bookId);
         return String.format("Book %s was deleted", bookId);
     }
 
     private String save(Book book) throws DataAccessException {
-        bookRepository.save(book);
+        bookRepo.save(book);
         return bookFormatter.format(book);
     }
 

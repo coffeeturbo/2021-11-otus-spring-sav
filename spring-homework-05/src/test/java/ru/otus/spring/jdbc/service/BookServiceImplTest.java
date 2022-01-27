@@ -4,6 +4,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -44,8 +45,8 @@ class BookServiceImplTest {
     @DisplayName("Получить книгу по id")
     @Test
     void getBookById() {
-        var book = bookService.getBookById(6);
-        assertThat(book).isEqualTo("ID: 6, AuthorName: CarlMarks, NAME: Капитал, GENRES: science");
+        var book = bookService.getBookById(4);
+        assertThat(book).isEqualTo("ID: 4, AuthorName: IsiacAsimov, NAME: Основание, GENRES: ");
     }
 
     @DisplayName("Изменить книгу")
@@ -55,6 +56,7 @@ class BookServiceImplTest {
         assertThat(book).isEqualTo("ID: 8, AuthorName: JackLondon, NAME: updatedBook, GENRES: comedy, drama");
     }
 
+    @Transactional
     @DisplayName("Удалить книгу")
     @Test
     void deleteBook() {

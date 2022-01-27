@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.jdbc.domain.Author;
 import ru.otus.spring.jdbc.domain.Book;
 import ru.otus.spring.jdbc.domain.Genre;
@@ -15,13 +15,12 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName(" Репозиторий Книги ")
+@DisplayName("Репозиторий Книги")
 @DataJpaTest
-@Import(BookRepositoryJpa.class)
-class BookRepositoryJpaTest {
+class BookRepositoryTest {
 
     @Autowired
-    private BookRepository bookRepository;
+    private BookRepository bookRepo;
 
     @Autowired
     private TestEntityManager entityManager;
@@ -36,14 +35,14 @@ class BookRepositoryJpaTest {
     @DisplayName("Получает количество книг")
     @Test
     void count() {
-        assertThat(bookRepository.count()).isEqualTo(8);
+        assertThat(bookRepo.count()).isEqualTo(8);
     }
 
     @DisplayName("Создать книгу")
     @Test
     void insert() {
         var newBook = Book.builder().author(author).name("test book").build();
-        newBook = bookRepository.save(newBook);
+        newBook = bookRepo.save(newBook);
         var actualBook = entityManager.find(Book.class, newBook.getId());
         assertThat(newBook.getId()).isNotNull().isGreaterThan(0);
         assertThat(actualBook).isNotNull()
@@ -63,7 +62,7 @@ class BookRepositoryJpaTest {
                 .name("test book")
                 .build();
 
-        updateBook = bookRepository.save(updateBook);
+        updateBook = bookRepo.save(updateBook);
         var actualBook = entityManager.find(Book.class, updateBook.getId());
         assertThat(actualBook)
                 .isNotNull()
@@ -71,18 +70,19 @@ class BookRepositoryJpaTest {
                 .isEqualTo(updateBook);
     }
 
+    @Transactional
     @DisplayName("Удалить книгу по id")
     @Test
     void deleteById() {
-        bookRepository.deleteById(10);
-        assertThat(entityManager.find(Book.class, 10L)).isNull();
+        bookRepo.deleteById(8);
+        assertThat(entityManager.find(Book.class, 8L)).isNull();
     }
 
     @DisplayName("Получить книгу по id")
     @Test
     void getById() {
         var expectedBook = entityManager.find(Book.class, 1L);
-        assertThat(bookRepository.getById(1)).isPresent().get()
+        assertThat(bookRepo.getById(1)).isPresent().get()
                 .usingRecursiveComparison()
                 .isNotNull()
                 .isEqualTo(expectedBook);
@@ -91,7 +91,7 @@ class BookRepositoryJpaTest {
     @DisplayName("Получить все книги")
     @Test
     void getAll() {
-        var books = bookRepository.getAll();
+        var books = bookRepo.findAll();
         assertThat(books)
                 .isNotNull()
                 .hasSize(8)

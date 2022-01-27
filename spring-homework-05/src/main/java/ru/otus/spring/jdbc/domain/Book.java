@@ -12,10 +12,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Objects;
 
-@NamedEntityGraph(name = "author-entity-graph",
-        attributeNodes = {
-        @NamedAttributeNode("author")
-})
+
 @Entity
 @Table(name = "book")
 @AllArgsConstructor

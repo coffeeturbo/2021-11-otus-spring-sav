@@ -30,7 +30,7 @@ public class CommentServiceImpl implements CommentService {
     @Transactional(readOnly = true)
     @Override
     public String getAllComments() {
-        var books = commentRepository.getAll();
+        var books = commentRepository.findAll();
         return books.stream()
                 .map(formatter::format)
                 .collect(Collectors.joining(", "));
