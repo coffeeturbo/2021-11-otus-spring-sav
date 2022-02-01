@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.shell.Shell;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -39,7 +38,6 @@ class CommentShellCommandsTest {
         ));
     }
 
-    @Transactional
     @DisplayName("Создает комментарий")
     @Test
     void createComent() {
@@ -48,7 +46,6 @@ class CommentShellCommandsTest {
                 .contains(" BOOK_ID: 1, TEXT: commentText");
     }
 
-    @Transactional
     @DisplayName("Изменяет комментарий")
     @Test
     void updateComment() {
@@ -56,7 +53,6 @@ class CommentShellCommandsTest {
         assertThat(res).isEqualTo("ID: 2, BOOK_ID: 1, TEXT: commentText");
     }
 
-    @Transactional
     @DisplayName("Удаляет комментарий по id")
     @Test
     void deleteComment() {

@@ -7,7 +7,6 @@ spring:
       database: library
       port: 27017
       host: localhost
-#      username: root
       password: example
   mongodb:
     embedded:
