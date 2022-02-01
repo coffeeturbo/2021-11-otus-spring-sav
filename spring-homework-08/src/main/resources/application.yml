@@ -1,0 +1,21 @@
+spring:
+  main:
+    allow-circular-references: true
+  data:
+    mongodb:
+      authentication-database: root
+      database: library
+      port: 27017
+      host: localhost
+#      username: root
+      password: example
+  mongodb:
+    embedded:
+      version: 3.4.0
+
+
+mongock:
+#  runner-type: "ApplicationRunner" # default
+  runner-type: "InitializingBean"
+  change-logs-scan-package:
+    - ru.otus.spring.jdbc.mongock.changelog
