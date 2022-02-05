@@ -67,6 +67,13 @@ public class BookServiceImpl implements BookService {
     }
 
     private String saveBook(Book book) throws DataAccessException {
+
+        if (book.getId() != null) {
+            var comments = commentRepository.findAllByBookId(book.getId());
+            comments.forEach(comment -> comment.setBook(book));
+            commentRepository.saveAll(comments);
+        }
+
         bookRepo.save(book);
         return bookFormatter.format(book);
     }
