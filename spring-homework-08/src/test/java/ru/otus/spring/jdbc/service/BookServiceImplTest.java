@@ -10,7 +10,9 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import ru.otus.spring.jdbc.domain.Author;
 import ru.otus.spring.jdbc.domain.Book;
+import ru.otus.spring.jdbc.domain.Comment;
 import ru.otus.spring.jdbc.domain.Genre;
+import ru.otus.spring.jdbc.repository.CommentRepository;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -26,6 +28,9 @@ class BookServiceImplTest {
 
     @Autowired
     private BookService bookService;
+
+    @Autowired
+    private CommentRepository commentRepository;
 
     @Autowired
     private MongoTemplate template;
@@ -99,6 +104,35 @@ class BookServiceImplTest {
                 .isExactlyInstanceOf(NoSuchElementException.class);
     }
 
+    @Test
+    void deleteBookWithComments() {
+
+        var bookGenres = implode(genreList.subList(0, 2));
+        bookService.save(null, authorJackLondon.getId(), "testBookDelete", bookGenres);
+        var book = template.findOne(new Query(Criteria.where("name").is("testBookDelete")), Book.class);
+        assertThat(book).isNotNull();
+
+        commentRepository.saveAll(List.of(
+                new Comment(null, book, "test1"),
+                new Comment(null, book, "test1333")
+        ));
+
+        var bookCommentsBefore = template.find(
+                new Query(Criteria.where("book.id").is(book.getId())),
+                Comment.class);
+
+        assertThat(bookCommentsBefore).hasSize(2);
+        assertThat(bookService.deleteBook(book.getId()))
+                .isNotNull()
+                        .contains(String.format("Book %s was deleted", book.getId()));
+        assertThatCode(() -> bookService.getBookById(book.getId()))
+                .isExactlyInstanceOf(NoSuchElementException.class);
+
+        var bookCommentsAfter = template.find(
+                new Query(Criteria.where("book.id").is(book.getId())),
+                Comment.class);
+        assertThat(bookCommentsAfter).hasSize(0);
+    }
 
     private String implode(List<Genre> genres) {
         return genres.stream()

@@ -9,6 +9,7 @@ import ru.otus.spring.jdbc.exception.DataAccessException;
 import ru.otus.spring.jdbc.formatter.BookFormatter;
 import ru.otus.spring.jdbc.repository.AuthorRepository;
 import ru.otus.spring.jdbc.repository.BookRepository;
+import ru.otus.spring.jdbc.repository.CommentRepository;
 import ru.otus.spring.jdbc.repository.GenreRepository;
 
 import java.util.Arrays;
@@ -24,6 +25,7 @@ public class BookServiceImpl implements BookService {
     private final AuthorRepository authorRepository;
     private final GenreRepository genreRepository;
     private final BookFormatter bookFormatter;
+    private final CommentRepository commentRepository;
 
     @Override
     public String save(String bookId, String authorId, String name, String genresIds) {
@@ -57,6 +59,10 @@ public class BookServiceImpl implements BookService {
     @Override
     public String deleteBook(String bookId) {
         bookRepo.deleteById(bookId);
+
+        var comments = commentRepository.findAllByBookId(bookId);
+        commentRepository.deleteAll(comments);
+
         return String.format("Book %s was deleted", bookId);
     }
 
