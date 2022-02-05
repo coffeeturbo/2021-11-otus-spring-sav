@@ -4,12 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
-import ru.otus.spring.jdbc.domain.Genre;
 import ru.otus.spring.jdbc.service.BookService;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
@@ -43,9 +38,4 @@ public class BooksShellCommands {
         return bookService.deleteBook(bookId);
     }
 
-    private List<Genre> getGenreList(String str) {
-       return Arrays.stream(str.split(","))
-                .map(id -> Genre.builder().id(id).build())
-                .collect(Collectors.toList());
-    }
 }

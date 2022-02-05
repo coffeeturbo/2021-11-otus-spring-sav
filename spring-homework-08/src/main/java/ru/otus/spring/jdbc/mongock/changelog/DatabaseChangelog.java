@@ -36,9 +36,9 @@ public class DatabaseChangelog {
     @ChangeSet(order = "003", id = "insertGenres", author = "vsavushkin", runAlways = true)
     public void insertGenres(GenreRepository genreRepository) {
         var genres = List.of(
-                Genre.builder().id("1").name("comedy").build(),
-                Genre.builder().id("2").name("drama").build(),
-                Genre.builder().id("3").name("science").build()
+                new Genre("1", "comedy"),
+                new Genre("2", "drama"),
+                new Genre("3", "science")
         );
 
         genreRepository.saveAll(genres);
@@ -60,11 +60,11 @@ public class DatabaseChangelog {
         var genres = genreRepository.findAll();
 
         var books = List.of(
-                Book.builder().id("1").name("Мартин Иден").author(jackLondon).genres(genres.subList(0, 1)).build(),
-                Book.builder().name("Любовь к жизни").author(jackLondon).genres(genres.subList(0, 1)).build(),
-                Book.builder().name("Сами боги").author(isacAsimov).genres(genres.subList(1, 1)).build(),
-                Book.builder().name("Основание").author(isacAsimov).genres(genres.subList(1, 1)).build(),
-                Book.builder().name("Стальные пещеры").author(isacAsimov).genres(genres).build()
+                new Book("1", jackLondon, "Мартин Иден", genres.subList(0, 1)),
+                new Book(null, jackLondon, "Любовь к жизни", genres.subList(0, 1)),
+                new Book(null, isacAsimov, "Сами боги", genres.subList(1, 1)),
+                new Book(null, isacAsimov, "Основание", genres.subList(1, 1)),
+                new Book(null, isacAsimov, "Стальные пещеры", genres)
         );
 
         bookRepository.saveAll(books);
@@ -75,12 +75,12 @@ public class DatabaseChangelog {
 
         var books = bookRepository.findAll();
         var comments = List.of(
-                Comment.builder().id("1").book(books.get(1)).text("Ужасная книга читал до упада").build(),
-                Comment.builder().id("2").book(books.get(1)).text("не читал").build(),
-                Comment.builder().id("3").book(books.get(1)).text("плохая книга").build(),
-                Comment.builder().id("4").book(books.get(1)).text("Так себе").build(),
-                Comment.builder().id("5").book(books.get(2)).text("читать не буду").build(),
-                Comment.builder().id("6").book(books.get(3)).text("Отличная книга читал до упада").build()
+                new Comment("1", books.get(1), "Ужасная книга читал до упада"),
+                new Comment("2", books.get(1), "не читал"),
+                new Comment("3", books.get(1), "плохая книга"),
+                new Comment("4", books.get(1), "Так себе"),
+                new Comment("5", books.get(2), "читать не буду"),
+                new Comment("6", books.get(3), "Отличная книга читал до упада")
         );
 
         commentRepository.saveAll(comments);

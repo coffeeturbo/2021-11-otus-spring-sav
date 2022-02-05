@@ -42,7 +42,7 @@ class GenreRepositoryTest {
     @DisplayName("Создать жанр")
     @Test
     void insert() {
-        var newGenre = Genre.builder().name("test genre").build();
+        var newGenre = new Genre(null, "test genre");
         var genre = genreRepository.save(newGenre);
         assertThat(genre.getId()).isNotNull();
 
@@ -52,7 +52,7 @@ class GenreRepositoryTest {
     @DisplayName("Обновить жанр")
     @Test
     void update() {
-        var updateGenre = Genre.builder().name("test genre").build();
+        var updateGenre = new Genre(null, "test genre");
         var genre = genreRepository.save(updateGenre);
 
         var expectedGenre = mongoTemplate.findById(genre.getId(), Genre.class);
@@ -66,7 +66,7 @@ class GenreRepositoryTest {
     @DisplayName("Удалить жанр по id")
     @Test
     void deleteById() {
-        var updateGenre = Genre.builder().name("test genre").build();
+        var updateGenre = new Genre(null, "test genre");
         var genre = genreRepository.save(updateGenre);
 
         genreRepository.deleteById(genre.getId());
@@ -77,7 +77,7 @@ class GenreRepositoryTest {
     @DisplayName("Получить жанр по id")
     @Test
     void getById() {
-        var newGenre = Genre.builder().name("test genre").build();
+        var newGenre = new Genre(null, "test genre");
         var genre = genreRepository.save(newGenre);
         assertThat(genre.getId()).isNotNull();
 

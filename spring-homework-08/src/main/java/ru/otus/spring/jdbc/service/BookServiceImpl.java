@@ -67,18 +67,7 @@ public class BookServiceImpl implements BookService {
 
     private Book bookBuilder(String bookId, String authorId, String name, List<Genre> genres) {
         var author = authorRepository.findById(authorId).orElseThrow();
-
-        var book = Book.builder()
-                .author(author)
-                .name(name)
-                .genres(genres)
-                .build();
-
-        if (bookId != null) {
-            book.setId(bookId);
-        }
-
-        return book;
+        return new Book(bookId, author, name, genres);
     }
 
 }

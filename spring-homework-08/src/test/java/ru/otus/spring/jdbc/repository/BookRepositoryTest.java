@@ -12,6 +12,7 @@ import ru.otus.spring.jdbc.domain.Author;
 import ru.otus.spring.jdbc.domain.Book;
 import ru.otus.spring.jdbc.domain.Genre;
 
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -55,11 +56,7 @@ class BookRepositoryTest {
     @DisplayName("Создать книгу")
     @Test
     void insert() {
-        var newBook = Book.builder()
-                .author(authorJackLondon)
-                .name("test book")
-                .genres(genreList)
-        .build();
+        var newBook = new Book(null, authorJackLondon, "test book", genreList);
         newBook = bookRepo.save(newBook);
         var actualBook = template.findById(newBook.getId(), Book.class);
         assertThat(newBook.getId()).isNotNull();
@@ -80,9 +77,7 @@ class BookRepositoryTest {
     @DisplayName("Изменить книгу")
     @Test
     void update() {
-        var newBook = Book.builder()
-                .author(authorIsacAsimov).name("test book")
-                .build();
+        var newBook = new Book(null, authorIsacAsimov, "test book", Collections.emptyList());
 
         newBook = bookRepo.save(newBook);
 
@@ -113,9 +108,7 @@ class BookRepositoryTest {
     @DisplayName("Удалить книгу по id")
     @Test
     void deleteById() {
-        var deleteBook = Book.builder()
-                .author(authorIsacAsimov).name("test book")
-                .build();
+        var deleteBook = new Book(null, authorIsacAsimov, "test book", Collections.emptyList());
 
         deleteBook = bookRepo.save(deleteBook);
         bookRepo.deleteById(deleteBook.getId());
@@ -125,11 +118,9 @@ class BookRepositoryTest {
     @DisplayName("Получить книгу по id")
     @Test
     void getById() {
-        var newBook = Book.builder()
-                .author(authorJackLondon)
-                .name("getByIdName")
-                .genres(genreList.subList(0, 1))
-        .build();
+
+        var newBook = new Book(null, authorJackLondon, "getByIdName", genreList.subList(0, 1));
+
         newBook = bookRepo.save(newBook);
 
         assertThat(bookRepo.findById(newBook.getId()))

@@ -34,9 +34,7 @@ class CommentRepositoryTest {
     @Test
     void testInsert() {
         var book = template.findById("1", Book.class);
-        var result = commentRepository.save(Comment.builder()
-                .book(book)
-                .text("text").build());
+        var result = commentRepository.save(new Comment(null, book, "text"));
         var expected = template.findById(result.getId(), Comment.class);
         assertThat(result).isNotNull()
                 .usingRecursiveComparison()

@@ -26,8 +26,7 @@ class AuthorRepositoryTest {
     @DisplayName("Ищет автора по Имени")
     @Test
     void whenFindByFirstNameSuccess() {
-
-        var newAuthor = Author.builder().firstName("Lermontov2").lastName("Sparrow").build();
+        var newAuthor = new Author(null, "Lermontov2", "Sparrow");
         authorRepository.save(newAuthor);
 
         var author = authorRepository.findOneByFirstName("Lermontov2");
@@ -43,7 +42,7 @@ class AuthorRepositoryTest {
     void count() {
         List<Author> authors = new ArrayList<>(5);
         for (int i = 0; i < 5; i++) {
-            var updatedAuthor = Author.builder().firstName("Jack " + i).lastName("Sparrow " + i).build();
+            var updatedAuthor = new Author(null, "Jack " + i, "Sparrow " + i);
             authors.add(updatedAuthor);
         }
 
@@ -58,7 +57,7 @@ class AuthorRepositoryTest {
     @DisplayName("Добавить автора")
     @Test
     void insert() {
-        var newAuthor = Author.builder().firstName("Jack").lastName("Sparrow").build();
+        var newAuthor = new Author(null, "Jack", "Sparrow");
         authorRepository.save(newAuthor);
 
         var saved = authorRepository.findById(newAuthor.getId());
@@ -78,7 +77,7 @@ class AuthorRepositoryTest {
     @DisplayName("Изменить автора")
     @Test
     void update() {
-        var newAuthor = Author.builder().firstName("Jack").lastName("Sparrow").build();
+        var newAuthor = new Author(null, "Jack", "Sparrow");
         authorRepository.save(newAuthor);
 
         newAuthor.setFirstName("Updated firstName");
@@ -98,7 +97,7 @@ class AuthorRepositoryTest {
     @Test
     void deleteByIdSuccess() {
 
-        var updatedAuthor = Author.builder().firstName("Jack").lastName("Sparrow").build();
+        var updatedAuthor = new Author(null, "Jack", "Sparrow");
         authorRepository.save(updatedAuthor);
 
         authorRepository.deleteById(updatedAuthor.getId());
