@@ -16,6 +16,7 @@
     <modules>
         <module>spring-homework-01</module>
         <module>spring-homework-05</module>
+        <module>spring-homework-09</module>
     </modules>
 
     <properties>
