@@ -53,7 +53,6 @@
         <label for="book-genres-input">genres:</label>
         <select id="book-genres-input" multiple name="bookGenreIds" >
             <option th:each="genre : ${genres}"
-                    th:selected="${book.getGenres().contains(genre)}"
                     th:text="${genre.name}"
                     th:value="${genre.id}">genrename</option>
         </select>

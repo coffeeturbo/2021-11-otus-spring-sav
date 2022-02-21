@@ -30,15 +30,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(BookController.class)
 class BookControllerTest {
 
-
     @MockBean
-    BookService bookService;
+    private BookService bookService;
     @MockBean
-    AuthorService authorService;
+    private AuthorService authorService;
     @MockBean
-    GenreService genreService;
+    private GenreService genreService;
     @MockBean
-    BookMapper bookMapper;
+    private BookMapper bookMapper;
     @Autowired
     private MockMvc mvc;
 
@@ -147,7 +146,7 @@ class BookControllerTest {
 
     @Test
     void testDeleteBookById() throws Exception {
-        mvc.perform(get("/books/delete/1"))
+        mvc.perform(post("/books/delete/1"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/"));
 
