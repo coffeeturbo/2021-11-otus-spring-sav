@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>List of all persons</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        .container {
+            margin: 0 auto;
+        }
+
+        .books {
+            border: 1px solid steelblue;
+            margin: 0 auto;
+            border-collapse: collapse;
+        }
+
+        .books tr td, th {
+            padding: 5px;
+            border: 1px solid steelblue;
+        }
+
+        .books td:last-child, td:first-child {
+            width: 50px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h3>Books:</h3>
+</div>
+<table class="books">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Author</th>
+            <th>Genre</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="book : ${books}">
+            <td th:text="${book.id}">1</td>
+            <td>
+                <a href="show.html"
+                   th:href="@{/books/{id}(id=${book.id})}"
+                   th:text="${book.name}"
+                >show</a>
+            </td>
+            <td th:text="${book.author.getLastName() + ' ' + book.author.getFirstName()}">last name</td>
+            <td>
+                <ul>
+                    <li th:each="genre: ${book.getGenres()}" th:text="${genre.name}"></li>
+                </ul>
+            </td>
+            <td>
+                <a href="edit.html" th:href="@{/books/edit/{id}(id=${book.id})}">Edit</a>
+
+                <form th:action="@{/books/delete/{id}(id=${book.id})}" th:method="post">
+                    <button>delete</button>
+                </form>
+            </td>
+        </tr>
+    </tbody>
+
+    <div class="container" ><a href="create.html" th:href="@{/books/create}">create</a></div>
+
+</table>
+</body>
+</html>
