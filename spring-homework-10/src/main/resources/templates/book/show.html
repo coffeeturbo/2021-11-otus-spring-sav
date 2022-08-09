@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Edit book</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+        }
+
+        input:read-only {
+            background: lightgray;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+
+        table tr td {
+            border: 1px solid steelblue;
+            margin: 0 auto;
+            border-collapse: collapse;
+        }
+
+        .table tr td, th {
+            padding: 5px;
+            border: 1px solid steelblue;
+        }
+    </style>
+</head>
+<body>
+
+<div class="row container" th:object="${book}">
+    <h3>Book Info Show:</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>NAME</th>
+                <th>AUTHOR</th>
+                <th>GENRES</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td th:text="*{id}"></td>
+                <td th:text="*{name}"></td>
+                <td th:text="${book.getAuthor().firstName} + ' ' + ${book.getAuthor().lastName}"></td>
+                <td>
+                    <ul th:each="genre : ${book.getGenres()}">
+                        <li th:text="${genre.name}"></li>
+                    </ul>
+                </td>
+                <td>
+                    <a href="edit.html" th:href="@{/books/edit/{id}(id=${book.id})}">Edit</a>
+                    <a href="edit.html" th:href="@{/books/delete/{id}(id=${book.id})}">delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <div class="row">
+        <a href="/" th:href="@{/}">back</a>
+    </div>
+</div>
+
+</body>
+</html>
