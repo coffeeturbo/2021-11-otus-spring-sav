@@ -3,7 +3,6 @@ package ru.otus.spring.mvc.http.controller.rest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.spring.mvc.dto.BookDto;
 import ru.otus.spring.mvc.http.controller.exception.NotFoundException;
@@ -19,8 +18,8 @@ public class BookController {
     private final BookService bookService;
 
 
-    @GetMapping({"/api/v1/", "/api/v1/books"})
-    public List<BookDto> listBooks(Model model) {
+    @GetMapping({ "/api/v1/books"})
+    public List<BookDto> listBooks() {
         return bookService.getAllBooks().stream()
                 .map(BookDto::toDto)
                 .collect(Collectors.toList());

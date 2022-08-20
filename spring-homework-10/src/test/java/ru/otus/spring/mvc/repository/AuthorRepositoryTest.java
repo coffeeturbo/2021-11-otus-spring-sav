@@ -8,12 +8,10 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.mvc.domain.Author;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Transactional
 @DisplayName(" Репозиторий Автора ")
 @Sql(value = "classpath:/db.changelog/data/2022-04-01-author.sql")
 @DataJpaTest
