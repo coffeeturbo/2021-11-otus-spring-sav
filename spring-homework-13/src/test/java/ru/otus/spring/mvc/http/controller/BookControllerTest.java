@@ -16,7 +16,7 @@ import ru.otus.spring.mvc.domain.Author;
 import ru.otus.spring.mvc.domain.Book;
 import ru.otus.spring.mvc.dto.BookDto;
 import ru.otus.spring.mvc.mapper.BookMapper;
-import ru.otus.spring.mvc.security.CustomUserDetailsService;
+import ru.otus.spring.mvc.security.CustomUserDetailsServiceImpl;
 import ru.otus.spring.mvc.service.AuthorService;
 import ru.otus.spring.mvc.service.BookService;
 import ru.otus.spring.mvc.service.GenreService;
@@ -46,7 +46,7 @@ class BookControllerTest {
     @Autowired
     private MockMvc mvc;
     @MockBean
-    private CustomUserDetailsService customUserDetailsService;
+    private CustomUserDetailsServiceImpl customUserDetailsService;
 
 
     @BeforeEach
@@ -57,7 +57,7 @@ class BookControllerTest {
 
     @Nested
     @DisplayName("Tests for get action")
-    class Read {
+    class ReadAction {
         @WithMockUser(
                 username = "admin",
                 authorities = {"ROLE_MANAGER"}
@@ -123,7 +123,7 @@ class BookControllerTest {
 
     @Nested
     @DisplayName("Tests for Edit action")
-    class Edit {
+    class EditAction {
         @WithMockUser(
                 username = "admin",
                 authorities = {"ROLE_ADMIN"}
@@ -205,7 +205,7 @@ class BookControllerTest {
 
     @Nested
     @DisplayName("Tests for create action ")
-    class Create {
+    class CreateAction {
         @WithMockUser(
                 username = "admin",
                 authorities = {"ROLE_ADMIN"}
@@ -260,7 +260,7 @@ class BookControllerTest {
 
     @Nested
     @DisplayName("Tests for delete action ")
-    class Delete {
+    class DeleteAction {
         @WithMockUser(
                 username = "admin",
                 authorities = {"ROLE_ADMIN"}

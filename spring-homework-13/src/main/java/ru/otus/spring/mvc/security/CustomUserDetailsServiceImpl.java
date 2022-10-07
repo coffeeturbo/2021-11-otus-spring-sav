@@ -9,9 +9,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.otus.spring.mvc.service.UserService;
 
+
 @Service
 @RequiredArgsConstructor
-public class CustomUserDetailsService implements UserDetailsService {
+public class CustomUserDetailsServiceImpl implements UserDetailsService {
 
     private final UserService userService;
 
@@ -23,7 +24,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         return User.builder()
                 .username(user.getLogin())
                 .password(user.getPassword())
-                .authorities(new SimpleGrantedAuthority("ROLE_" + user.getRoles()))
+                .authorities(new SimpleGrantedAuthority("ROLE_" + user.getRole()))
                 .build();
     }
 }
