@@ -19,6 +19,7 @@ public class User {
     private String login;
     private String password;
     private String salt;
-    private String roles;
+    @Column(name = "roles")
+    private String role;
 
 }
