@@ -57,7 +57,7 @@ class BookControllerTest {
 
     @Nested
     @DisplayName("Tests for get action")
-    class ReadAction {
+    class ReadActionTests {
         @WithMockUser(
                 username = "admin",
                 authorities = {"ROLE_MANAGER"}
@@ -123,7 +123,7 @@ class BookControllerTest {
 
     @Nested
     @DisplayName("Tests for Edit action")
-    class EditAction {
+    class EditActionTests {
         @WithMockUser(
                 username = "admin",
                 authorities = {"ROLE_ADMIN"}
@@ -205,7 +205,7 @@ class BookControllerTest {
 
     @Nested
     @DisplayName("Tests for create action ")
-    class CreateAction {
+    class CreateActionTests {
         @WithMockUser(
                 username = "admin",
                 authorities = {"ROLE_ADMIN"}
@@ -260,7 +260,7 @@ class BookControllerTest {
 
     @Nested
     @DisplayName("Tests for delete action ")
-    class DeleteAction {
+    class DeleteActionTests {
         @WithMockUser(
                 username = "admin",
                 authorities = {"ROLE_ADMIN"}
